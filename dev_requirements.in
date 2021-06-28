@@ -1,0 +1,6 @@
+black
+boto3
+pre-commit
+pytest
+pytest-cov
+mypy

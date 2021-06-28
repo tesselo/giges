@@ -1,0 +1,20 @@
+openapi: '3.0.2'
+swagger: ''
+info:
+  title: Tesselo Giges integrations API
+  description: 'One giant with 50 heads and 100 arms'
+  contact:
+    name: Tesselo integrations
+    x-slack: '#tech-team'
+
+servers:
+  - url: /
+    description: Giges API
+
+security: []
+
+basePath: ''
+consumes: ''
+produces: ''
+schemes: ''
+definitions: ''

@@ -1,0 +1,16 @@
+/ping:
+  get:
+    operationId: giges.handlers.health.ping
+    summary:
+    responses:
+      200:
+        description: 'Health check result'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pong:
+                  type: boolean
+
+

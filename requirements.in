@@ -1,0 +1,5 @@
+connexion[swagger-ui]
+flask<2.0
+zappa
+typing
+git+https://gitlab.com/jsmesami/connexion-compose
