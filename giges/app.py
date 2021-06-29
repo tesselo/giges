@@ -1,5 +1,4 @@
 import connexion
-from connexion_compose import compile_schema
 from connexion.apps.flask_app import FlaskApp
 from connexion.resolver import RestyResolver
 from flask import Flask
@@ -10,11 +9,11 @@ class App(FlaskApp):
         return app
 
 def create_connexion_app():
-    connexion_app = App(__package__)
+    connexion_app = App(__package__, specification_dir="schemas/")
     flask_app = connexion_app.app
     
     connexion_app.add_api(
-            compile_schema('giges/schemas'),
+            "api.yml",
             validate_responses=True,
             strict_validation=True,
             resolver=RestyResolver("giges.handlers")
@@ -23,3 +22,5 @@ def create_connexion_app():
     return connexion_app
 
 
+def create_flask_app():
+    return create_connexion_app().app

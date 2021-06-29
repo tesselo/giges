@@ -1,0 +1,19 @@
+{
+    "staging": {
+	"app_function": "zappa_init.app",
+        "aws_region": "eu-central-1",
+        "project_name": "giges",
+	"profile_name": "default",
+        "runtime": "python3.8",
+        "s3_bucket": "zappa-giges-staging",
+        "domain": "integrations-staging.tesselo.com",
+        "certificate_arn": "arn:aws:acm:us-east-1:595064993071:certificate/3cac1dfe-5915-4325-91fa-a53952cbd2e1"
+    },
+    "production": {
+      "log_level": "WARNING",
+      "extends": "staging",
+      "project_name": "giges",
+      "s3_bucket": "zappa-giges-production",
+      "domain": "integrations.tesselo.com"
+    }
+}
