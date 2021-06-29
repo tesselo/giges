@@ -3,7 +3,7 @@ import os
 from setuptools import find_packages, setup
 
 with open("requirements.in") as f:
-    install_requires = [line for line in f if line and line[0] not in "#-g"]
+    install_requires = [line for line in f if line and line[0] not in "#-"]
 
 with open("dev_requirements.in") as f:
     tests_require = [line for line in f if line and line[0] not in "#-"]

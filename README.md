@@ -1,7 +1,7 @@
 
 # Giges
 
-The one hundred arms giant in charge of Tesselo's integrations
+The one hundred arms giant in charge of Tesselo integrations
 
 ## Install runtime dependencies
 

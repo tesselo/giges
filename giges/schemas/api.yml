@@ -1,8 +1,8 @@
-openapi: '3.0.2'
-swagger: ''
+openapi: '3.0.3'
 info:
   title: Tesselo Giges integrations API
   description: 'One giant with 50 heads and 100 arms'
+  version: 0.0.1
   contact:
     name: Tesselo integrations
     x-slack: '#tech-team'
@@ -13,8 +13,11 @@ servers:
 
 security: []
 
-basePath: ''
-consumes: ''
-produces: ''
-schemes: ''
-definitions: ''
+paths:
+  /ping:
+    get:
+      operationId: giges.handlers.health.ping
+      summary: Pong that ping
+      responses:
+        200:
+          description: 'Health check result'
