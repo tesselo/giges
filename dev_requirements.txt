@@ -38,6 +38,8 @@ jmespath==0.10.0
     # via
     #   boto3
     #   botocore
+lxml==4.6.3
+    # via -r dev_requirements.in
 mccabe==0.6.1
     # via flake8
 mypy==0.910
