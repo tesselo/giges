@@ -1,6 +1,7 @@
 black
 boto3
 flake8
+lxml
 pre-commit
 pytest
 pytest-cov
