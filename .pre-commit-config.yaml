@@ -11,7 +11,7 @@ repos:
     rev: 21.5b0
     hooks:
       - id: black
-        args: [-tpy38, -q, --check]
+        args: [-tpy38, -q, -l79, --check]
 
   - repo: https://github.com/timothycrosley/isort
     rev: 5.1.1

@@ -20,6 +20,9 @@ mypy:
 coverage:
 	python -m pytest --cov=giges --cov-report term --cov-report html:reports/coverage-integration --cov-report term:skip-covered
 
+black:
+	python -m black -l79 -tpy38 giges test
+
 pre-commit:
 	pre-commit run -a
 
