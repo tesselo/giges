@@ -1,3 +1,6 @@
+#
+#   Package Management
+#
 .PHONY: install dev_install upgrade_dependencies
 
 install:
@@ -13,12 +16,23 @@ upgrade_dependencies: dev_install
 	pip-compile --upgrade --output-file ./requirements.txt requirements.in
 	pip-compile --upgrade --output-file ./dev_requirements.txt dev_requirements.in
 
+#
+#   Extended Reports
+#
+.PHONY: mypy coverage
+
 mypy:
 	python -m mypy --config-file ./mypy.ini giges --txt-report .mypy_reports
 	cat .mypy_reports/index.txt
 
 coverage:
 	python -m pytest --cov=giges --cov-report term --cov-report html:reports/coverage-integration --cov-report term:skip-covered
+
+
+#
+#   Code Checks
+#
+.PHONY: pre-commit check semgrep
 
 black:
 	python -m black -l79 -tpy38 giges test
@@ -27,3 +41,15 @@ pre-commit:
 	pre-commit run -a
 
 check: pre-commit  mypy coverage
+
+semgrep:
+	semgrep --config=p/r2c-ci --config=p/flask
+
+check-extended: check semgrep
+#
+#   Code Checks auto-fix
+#
+.PHONY: black
+
+black:
+	python -m black -l79 -tpy38 giges test *.py
