@@ -5,23 +5,32 @@
 #    pip-compile --output-file=./dev_requirements.txt dev_requirements.in
 #
 appdirs==1.4.4
-    # via
-    #   black
-    #   virtualenv
+    # via black
 attrs==21.2.0
-    # via pytest
+    # via
+    #   jsonschema
+    #   pytest
+    #   semgrep
+backports.entry-points-selectable==1.1.0
+    # via virtualenv
 black==21.6b0
     # via -r dev_requirements.in
-boto3==1.17.103
+boto3==1.17.111
     # via -r dev_requirements.in
-botocore==1.20.103
+botocore==1.20.111
     # via
     #   boto3
     #   s3transfer
+certifi==2021.5.30
+    # via requests
 cfgv==3.3.0
     # via pre-commit
+charset-normalizer==2.0.1
+    # via requests
 click==8.0.1
     # via black
+colorama==0.4.4
+    # via semgrep
 coverage==5.5
     # via pytest-cov
 distlib==0.3.2
@@ -30,14 +39,18 @@ filelock==3.0.12
     # via virtualenv
 flake8==3.9.2
     # via -r dev_requirements.in
-identify==2.2.10
+identify==2.2.11
     # via pre-commit
+idna==3.2
+    # via requests
 iniconfig==1.1.1
     # via pytest
 jmespath==0.10.0
     # via
     #   boto3
     #   botocore
+jsonschema==3.2.0
+    # via semgrep
 lxml==4.6.3
     # via -r dev_requirements.in
 mccabe==0.6.1
@@ -50,10 +63,14 @@ mypy-extensions==0.4.3
     #   mypy
 nodeenv==1.6.0
     # via pre-commit
-packaging==20.9
-    # via pytest
+packaging==21.0
+    # via
+    #   pytest
+    #   semgrep
 pathspec==0.8.1
     # via black
+platformdirs==2.0.2
+    # via virtualenv
 pluggy==0.13.1
     # via pytest
 pre-commit==2.13.0
@@ -66,22 +83,33 @@ pyflakes==2.3.1
     # via flake8
 pyparsing==2.4.7
     # via packaging
+pyrsistent==0.18.0
+    # via jsonschema
 pytest==6.2.4
     # via
     #   -r dev_requirements.in
     #   pytest-cov
 pytest-cov==2.12.1
     # via -r dev_requirements.in
-python-dateutil==2.8.1
+python-dateutil==2.8.2
     # via botocore
 pyyaml==5.4.1
     # via pre-commit
-regex==2021.4.4
+regex==2021.7.6
     # via black
+requests==2.26.0
+    # via semgrep
+ruamel.yaml==0.17.10
+    # via semgrep
+ruamel.yaml.clib==0.2.6
+    # via ruamel.yaml
 s3transfer==0.4.2
     # via boto3
+semgrep==0.57.0
+    # via -r dev_requirements.in
 six==1.16.0
     # via
+    #   jsonschema
     #   python-dateutil
     #   virtualenv
 toml==0.10.2
@@ -91,9 +119,16 @@ toml==0.10.2
     #   pre-commit
     #   pytest
     #   pytest-cov
+tqdm==4.61.2
+    # via semgrep
 typing-extensions==3.10.0.0
     # via mypy
 urllib3==1.26.6
-    # via botocore
-virtualenv==20.4.7
+    # via
+    #   botocore
+    #   requests
+virtualenv==20.5.0
     # via pre-commit
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
