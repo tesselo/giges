@@ -13,11 +13,74 @@ servers:
 
 security: []
 
+components:
+  schemas:
+    AsanaEventWebhookBody:
+      title: Asana Event Webhook Body
+      type: object
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            description: Asana Event
+            type: object
+
+    AsanaEventWebhookEmptyBody:
+      title: Asana Event Webhook Empty Body
+      type: object
+
+
+  parameters:
+    HookSecretHeader:
+      name: x-hook-secret
+      description: Provided secret to stablish a webhook
+      in: header
+      schema:
+        type: string
+
+    HookSignatureHeader:
+      name: x-hook-signature
+      description: Computed signature for a webhook event
+      in: header
+      schema:
+        type: string
+
 paths:
   /ping:
     get:
+      tags: [Health]
       operationId: giges.handlers.health.ping
       summary: Pong that ping
       responses:
         200:
           description: 'Health check result'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pong:
+                    type: boolean
+  /asana/projects:
+    post:
+      tags: [Asana]
+      operationId: giges.handlers.asana.projects
+      summary: Asana Projects webhook
+      parameters:
+        - $ref: '#/components/parameters/HookSecretHeader'
+        - $ref: '#/components/parameters/HookSignatureHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/AsanaEventWebhookBody'
+                - $ref: '#/components/schemas/AsanaEventWebhookEmptyBody'
+
+      responses:
+        204:
+          description: 'Webhook handled correctly'
+        400:
+          description: 'Webhook handling format error'
