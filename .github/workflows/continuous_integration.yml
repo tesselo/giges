@@ -1,0 +1,128 @@
+name: Continuous Integration for Giges
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    branches:
+     - main
+    types: deploy-production
+
+jobs:
+  static_checks:
+    name: Static checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+      - name: Install Python 3
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install Python dependencies
+        run: pip install black flake8
+      - name: Run black and flake
+        uses: wearerequired/lint-action@v1
+        with:
+          black: true
+          flake8: true
+
+  python_dependencies:
+    name: Python dependencies
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout giges
+       uses: actions/checkout@v2
+       with:
+         path: ./giges
+     - name: Attempt to use cache
+       uses: actions/cache@v2
+       id: cache
+       with:
+         path: ./giges-venv
+         key: ${{ runner.os }}-pip-${{ hashFiles('**/*requirements.txt') }}
+     - name: Install Python 3
+       uses: actions/setup-python@v1
+       with:
+         python-version: 3.8
+     - name: Create virtualenv and install deps
+       if: steps.cache.outputs.cache-hit != 'true'
+       run: |
+         python -m pip install --upgrade pip virtualenv
+         virtualenv -p /usr/bin/python3 ./giges-venv
+         source ./giges-venv/bin/activate
+         pip install -r ./giges/requirements.txt
+         pip install -r ./giges/dev_requirements.txt
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    needs: [python_dependencies]
+    steps:
+      - name: Checkout giges
+        uses: actions/checkout@v2
+        with:
+          path: ./giges
+      - name: Attempt to use cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ./giges-venv
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/*requirements.txt') }}
+      - name: Test
+        run: |
+          source ./giges-venv/bin/activate
+          cd giges && python -m pytest test
+  deploy-staging:
+    name: Deploy to Staging
+    needs: [python_dependencies, static_checks, test]
+    runs-on: ubuntu-latest
+    if: contains('refs/heads/main', github.ref)
+    steps:
+      - name: Checkout giges
+        uses: actions/checkout@v2
+        with:
+          path: ./giges
+      - name: Attempt to use cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ./giges-venv
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/*requirements.txt') }}
+      - name: Deploy
+        run: |
+          source ./giges-venv/bin/activate
+          cd ./giges
+          zappa update staging --disable_progress
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  deploy-production:
+    name: Deploy to Production
+    needs: [python_dependencies, static_checks, test, deploy-staging]
+    runs-on: ubuntu-latest
+    if: contains('workflow_dispatch', github.event)
+    steps:
+      - name: Checkout giges
+        uses: actions/checkout@v2
+        with:
+          path: ./giges
+      - name: Attempt to use cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ./giges-venv
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/*requirements.txt') }}
+      - name: Deploy
+        run: |
+          source ./giges-venv/bin/activate
+          cd ./giges
+          zappa update production --disable_progress
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
