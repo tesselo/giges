@@ -3,7 +3,6 @@
 	"app_function": "zappa_init.app",
         "aws_region": "eu-central-1",
         "project_name": "giges",
-	"profile_name": "default",
         "runtime": "python3.8",
         "s3_bucket": "zappa-giges-staging",
         "domain": "integrations-staging.tesselo.com",
