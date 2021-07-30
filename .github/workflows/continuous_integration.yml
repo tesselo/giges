@@ -8,9 +8,11 @@ on:
     branches:
       - main
   workflow_dispatch:
-    branches:
-     - main
-    types: deploy-production
+    inputs:
+      sure:
+        description: 'Are you sure to deploy this thing to production?'
+        required: true
+        default: 'Not really'
 
 jobs:
   static_checks:
@@ -104,9 +106,9 @@ jobs:
 
   deploy-production:
     name: Deploy to Production
-    needs: [python_dependencies, static_checks, test, deploy-staging]
+    needs: [python_dependencies, static_checks, test]
     runs-on: ubuntu-latest
-    if: contains('workflow_dispatch', github.event)
+    if: contains('yes', github.event.inputs.sure)
     steps:
       - name: Checkout giges
         uses: actions/checkout@v2
