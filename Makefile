@@ -34,9 +34,6 @@ coverage:
 #
 .PHONY: pre-commit check semgrep
 
-black:
-	python -m black -l79 -tpy38 giges test
-
 pre-commit:
 	pre-commit run -a
 
@@ -52,4 +49,4 @@ check-extended: check semgrep
 .PHONY: black
 
 black:
-	python -m black -l79 -tpy38 giges test *.py
+	python -m black -l79 -tpy38 giges migrations test *.py

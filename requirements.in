@@ -1,3 +1,11 @@
-connexion[swagger-ui]
-flask<2.0
+dictalchemy
+flask-migrate
+flask-sqlalchemy
+psycopg2
 zappa
+sqlalchemy
+
+# All the package restrictions are due to zappa :(
+troposphere<3
+flask==1.1.4
+connexion[swagger-ui]==2.7.0
