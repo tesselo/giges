@@ -5,6 +5,7 @@ import connexion
 from connexion.apps.flask_app import FlaskApp
 from connexion.resolver import RestyResolver
 from flask import Flask
+from flask_migrate import Migrate
 
 SETTINGS_VARIABLE_NAME = "GIGES_SETTINGS"
 
@@ -39,6 +40,13 @@ def create_connexion_app(
         strict_validation=True,
         resolver=RestyResolver("giges.handlers"),
     )
+
+    from .db import db
+
+    db.init_app(flask_app)
+    db.app = flask_app
+
+    Migrate(flask_app, db)
 
     return connexion_app
 

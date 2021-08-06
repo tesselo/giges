@@ -257,5 +257,6 @@ target/
 .venv/
 venv/
 
-# Testing database
-database.db
+# Local databases
+testing.db
+development.db
