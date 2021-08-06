@@ -13,11 +13,12 @@ repos:
       - id: black
         args: [-tpy38, -q, -l79, --check]
 
-  - repo: https://github.com/timothycrosley/isort
-    rev: 5.1.1
+  - repo: https://github.com/pycqa/isort
+    rev: 5.8.0
     hooks:
       - id: isort
         types: [python]
+        args: [-l79, -m3, --trailing-comma, --ignore-whitespace]
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.910
     hooks:
