@@ -34,3 +34,19 @@ To manually force run the pre-commit tasks, you can type:
 pre-commit run --all-files
 ```
 
+
+## Flask CLI
+
+Database management and other operations will be integrated into the Flask CLI
+
+```bash
+pip install -e .
+GIGES_SETTINGS=giges.settings.DevelopmentSettings giges
+```
+
+### Create & upgrade the database
+
+```bash
+pip install -e .
+GIGES_SETTINGS=giges.settings.DevelopmentSettings giges db upgrade head
+```
