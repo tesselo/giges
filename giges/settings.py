@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 
 class BaseSettings:
@@ -7,6 +8,10 @@ class BaseSettings:
 
     ENVIRONMENT = ""
     DEBUG = os.getenv("GIGES_DEBUG", "0") == "1"
+
+    # Database
+    SQLALCHEMY_DATABASE_URI = os.getenv("GIGES_DATABASE_URI")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class ProductionSettings(BaseSettings):
@@ -20,7 +25,13 @@ class StagingSettings(BaseSettings):
 class DevelopmentSettings(BaseSettings):
     ENVIRONMENT = "development"
     DEBUG = True
+    SQLALCHEMY_DATABASE_URI = (
+        f"sqlite:///{Path(__file__).parents[1]}/development.db"
+    )
 
 
 class TestingSettings(BaseSettings):
     ENVIRONMENT = "testing"
+    SQLALCHEMY_DATABASE_URI = (
+        f"sqlite:///{Path(__file__).parents[1]}/testing.db"
+    )
