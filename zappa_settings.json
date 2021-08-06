@@ -8,13 +8,19 @@
       "domain": "integrations-staging.tesselo.com",
       "certificate_arn": "arn:aws:acm:us-east-1:595064993071:certificate/3cac1dfe-5915-4325-91fa-a53952cbd2e1",
       "log_level": "INFO",
-      "slim_handler": true
+      "slim_handler": true,
+      "environment_variables": {
+        "GIGES_SETTINGS": "giges.settings.StagingSettings"
+      }
     },
     "production": {
       "log_level": "WARNING",
       "extends": "staging",
       "project_name": "giges",
       "s3_bucket": "zappa-giges-production",
-      "domain": "integrations.tesselo.com"
+      "domain": "integrations.tesselo.com",
+      "environment_variables": {
+        "GIGES_SETTINGS": "giges.settings.ProductionSettings"
+      }
     }
 }
