@@ -29,10 +29,14 @@ class Project(db.Model, UUIDMixin):
         String, nullable=False, index=True, doc="Name of the project"
     )
     created_at = Column(
-        TIMESTAMP, nullable=False, doc="When the project was created in Asana"
+        TIMESTAMP,
+        nullable=False,
+        doc="When the project was created in Asana",
     )
     updated_at = Column(
-        TIMESTAMP, nullable=False, doc="When the project was modified in Asana"
+        TIMESTAMP,
+        nullable=False,
+        doc="When the project was modified in Asana",
     )
 
 
@@ -41,7 +45,6 @@ class Webhook(db.Model, UUIDMixin):
 
     external_id = db.Column(
         String,
-        nullable=False,
         index=True,
         doc="The ID of the Webhook in Asana",
     )
@@ -57,7 +60,6 @@ class Webhook(db.Model, UUIDMixin):
     )
     secret = db.Column(
         String,
-        nullable=False,
         doc="Secret used to verify the hash of received events",
     )
 
