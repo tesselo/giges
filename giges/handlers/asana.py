@@ -1,7 +1,9 @@
-import logging
 from typing import Dict, Tuple, Union
 
+import structlog
 from connexion import request
+
+logger = structlog.get_logger(__name__)
 
 
 def projects() -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
@@ -24,5 +26,5 @@ def projects() -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
     if request.headers.get("X-Hook-Secret"):
         return {}, 204, {"X-Hook-Secret": request.headers["X-Hook-Secret"]}
 
-    logging.info(request.json["events"])
+    logger.info(request.json["events"])
     return {}, 204

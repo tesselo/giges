@@ -4,6 +4,7 @@ flask-sqlalchemy
 psycopg2
 zappa
 sqlalchemy
+structlog
 
 # All the package restrictions are due to zappa :(
 troposphere<3
