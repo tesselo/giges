@@ -7,6 +7,7 @@ class BaseSettings:
     APP_VERSION = os.getenv("APP_VERSION", "latest")
 
     ENVIRONMENT = ""
+    SENTRY_URI = ""
     DEBUG = os.getenv("GIGES_DEBUG", "0") == "1"
 
     # Database
@@ -16,6 +17,8 @@ class BaseSettings:
 
 class ProductionSettings(BaseSettings):
     ENVIRONMENT = "production"
+
+    SENTRY_URI = "https://ec9a91e1ce0e40f59388c665c092dc2a@o640190.ingest.sentry.io/5911249"  # noqa: E501
 
 
 class StagingSettings(BaseSettings):

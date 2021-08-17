@@ -4,11 +4,13 @@ import sys
 from typing import Any, Optional
 
 import connexion
+import sentry_sdk
 import structlog
 from connexion.apps.flask_app import FlaskApp
 from connexion.resolver import RestyResolver
 from flask import Flask
 from flask_migrate import Migrate
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 SETTINGS_VARIABLE_NAME = "GIGES_SETTINGS"
 
@@ -41,6 +43,15 @@ def configure_logging() -> None:
     logging.basicConfig(
         format="%(message)s", stream=sys.stdout, level=logging.INFO
     )
+
+
+def configure_sentry(app: Flask) -> None:
+    if app.config["SENTRY_URI"]:
+        sentry_sdk.init(
+            dsn=app.config["SENTRY_URI"],
+            environment=app.config["ENVIRONMENT"],
+            integrations=[FlaskIntegration()],
+        )
 
 
 def create_connexion_app(
@@ -76,6 +87,7 @@ def create_connexion_app(
     Migrate(flask_app, db)
 
     configure_logging()
+    configure_sentry(flask_app)
 
     return connexion_app
 
