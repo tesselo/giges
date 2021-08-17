@@ -1,7 +1,10 @@
+import logging
 import os
+import sys
 from typing import Any, Optional
 
 import connexion
+import structlog
 from connexion.apps.flask_app import FlaskApp
 from connexion.resolver import RestyResolver
 from flask import Flask
@@ -14,6 +17,30 @@ class App(FlaskApp):
     def create_app(self) -> Flask:
         app = Flask(__name__)
         return app
+
+
+def configure_logging() -> None:
+    structlog.configure(
+        processors=[
+            structlog.stdlib.filter_by_level,
+            structlog.processors.TimeStamper(fmt="iso"),
+            structlog.stdlib.add_logger_name,
+            structlog.stdlib.add_log_level,
+            structlog.stdlib.PositionalArgumentsFormatter(),
+            structlog.processors.StackInfoRenderer(),
+            structlog.processors.format_exc_info,
+            structlog.processors.UnicodeDecoder(),
+            structlog.processors.JSONRenderer(),
+        ],
+        context_class=structlog.threadlocal.wrap_dict(dict),
+        logger_factory=structlog.stdlib.LoggerFactory(),
+        wrapper_class=structlog.stdlib.BoundLogger,
+        cache_logger_on_first_use=True,
+    )
+
+    logging.basicConfig(
+        format="%(message)s", stream=sys.stdout, level=logging.INFO
+    )
 
 
 def create_connexion_app(
@@ -47,6 +74,8 @@ def create_connexion_app(
     db.app = flask_app
 
     Migrate(flask_app, db)
+
+    configure_logging()
 
     return connexion_app
 

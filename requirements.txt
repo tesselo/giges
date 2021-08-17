@@ -10,11 +10,11 @@ argcomplete==1.12.3
     # via zappa
 attrs==21.2.0
     # via jsonschema
-boto3==1.18.14
+boto3==1.18.22
     # via
     #   kappa
     #   zappa
-botocore==1.21.14
+botocore==1.21.22
     # via
     #   boto3
     #   s3transfer
@@ -53,7 +53,7 @@ flask-sqlalchemy==2.5.1
     #   flask-migrate
 future==0.18.2
     # via zappa
-greenlet==1.1.0
+greenlet==1.1.1
     # via sqlalchemy
 hjson==3.0.2
     # via zappa
@@ -138,15 +138,17 @@ sqlalchemy==1.4.22
     #   alembic
     #   dictalchemy
     #   flask-sqlalchemy
+structlog==21.1.0
+    # via -r requirements.in
 swagger-ui-bundle==0.0.8
     # via connexion
 text-unidecode==1.3
     # via python-slugify
 toml==0.10.2
     # via zappa
-tomli==1.2.0
+tomli==1.2.1
     # via pep517
-tqdm==4.62.0
+tqdm==4.62.1
     # via zappa
 troposphere==2.7.1
     # via
@@ -160,7 +162,7 @@ werkzeug==0.16.1
     # via
     #   flask
     #   zappa
-wheel==0.36.2
+wheel==0.37.0
     # via
     #   pip-tools
     #   zappa
