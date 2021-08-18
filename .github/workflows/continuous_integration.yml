@@ -110,7 +110,7 @@ jobs:
     name: Deploy to Production
     needs: [python_dependencies, static_checks, test]
     runs-on: ubuntu-latest
-    if: contains('yes', github.event.inputs.sure) && contains('workflow_dispatch', github.event)
+    if: contains('yes', github.event.inputs.sure) && contains('workflow_dispatch', github.event_name)
     steps:
       - name: Checkout giges
         uses: actions/checkout@v2
