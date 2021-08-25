@@ -3,6 +3,9 @@
 #
 .PHONY: install dev_install upgrade_dependencies
 
+cli_install:
+	pip install -e .
+
 install:
 	pip install -r requirements.txt
 
