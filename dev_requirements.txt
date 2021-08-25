@@ -15,9 +15,9 @@ backports.entry-points-selectable==1.1.0
     # via virtualenv
 black==21.7b0
     # via -r dev_requirements.in
-boto3==1.18.19
+boto3==1.18.28
     # via -r dev_requirements.in
-botocore==1.21.19
+botocore==1.21.28
     # via
     #   boto3
     #   s3transfer
@@ -99,17 +99,17 @@ python-dateutil==2.8.2
     # via botocore
 pyyaml==5.4.1
     # via pre-commit
-regex==2021.8.3
+regex==2021.8.21
     # via black
 requests==2.26.0
     # via semgrep
-ruamel.yaml==0.17.10
+ruamel.yaml==0.17.13
     # via semgrep
 ruamel.yaml.clib==0.2.6
     # via ruamel.yaml
 s3transfer==0.5.0
     # via boto3
-semgrep==0.61.0
+semgrep==0.62.0
     # via -r dev_requirements.in
 six==1.16.0
     # via
@@ -124,7 +124,7 @@ toml==0.10.2
     #   pytest-cov
 tomli==1.2.1
     # via black
-tqdm==4.62.0
+tqdm==4.62.2
     # via semgrep
 typing-extensions==3.10.0.0
     # via mypy

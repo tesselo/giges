@@ -1,10 +1,10 @@
+asana
 dictalchemy
 flask-migrate
 flask-sqlalchemy
-psycopg2
+psycopg2-binary
 zappa
 sentry-sdk[flask]
-sqlalchemy
 structlog
 
 # All the package restrictions are due to zappa :(
