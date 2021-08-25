@@ -89,6 +89,13 @@ def create_connexion_app(
     configure_logging()
     configure_sentry(flask_app)
 
+    # Import CLI packages here to avoid circular requires
+    from giges.cli.asana import (  # pylint: disable=import-outside-toplevel
+        asana_cli,
+    )
+
+    flask_app.cli.add_command(asana_cli)
+
     return connexion_app
 
 
