@@ -14,11 +14,11 @@ attrs==21.2.0
     # via jsonschema
 blinker==1.4
     # via sentry-sdk
-boto3==1.18.28
+boto3==1.18.30
     # via
     #   kappa
     #   zappa
-botocore==1.21.28
+botocore==1.21.30
     # via
     #   boto3
     #   s3transfer

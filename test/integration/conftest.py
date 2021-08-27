@@ -1,9 +1,14 @@
 import flask_migrate
 import pytest
+from pytest_factoryboy import register
 from sqlalchemy import inspect
 
 from giges.app import create_connexion_app
 from giges.db import db
+from .factories import EventFactory, ProjectFactory, WebhookFactory
+
+for factory in (EventFactory, ProjectFactory, WebhookFactory):
+    register(factory)
 
 
 @pytest.fixture(scope="session")
