@@ -1,0 +1,57 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      X-Asana-Client-Lib:
+      - language=Python&version=0.10.3&language_version=3.8.11&os=Linux&os_version=5.13.5-zen1-1-zen
+    method: GET
+    uri: https://app.asana.com/api/1.0/webhooks?limit=50&workspace=1199978051314275
+  response:
+    body:
+      string: '{"data":[{"gid":"1200890863508545","active":true,"resource":{"gid":"1199978051314275","name":"tesselo.com","resource_type":"workspace"},"resource_type":"webhook","target":"https://integrations-staging.tesselo.com/asana/projects"}],"next_page":null}'
+    headers:
+      Asana-Change:
+      - name=new_user_task_lists;info=https://forum.asana.com/t/update-on-our-planned-api-changes-to-user-task-lists-a-k-a-my-tasks/103828
+      Connection:
+      - keep-alive
+      Content-Security-Policy:
+      - report-uri https://app.asana.com/-/csp_report?report_only=false;default-src
+        'none';frame-src 'none';frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Datacenter-Time-End:
+      - '1630418594.153'
+      Date:
+      - Tue, 31 Aug 2021 14:03:14 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Asana-Api-Version:
+      - '1.1'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-LoadBalancer:
+      - prod-lb013.ec2
+      X-Robots-Tag:
+      - none
+      X-XSS-Protection:
+      - 1; mode=block
+      content-length:
+      - '248'
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -46,6 +46,7 @@ class DevelopmentSettings(BaseSettings):
 class TestingSettings(BaseSettings):
     ENVIRONMENT = "testing"
     SERVER_BASE_URI = "http://localhost:8080"
+    ASANA_TOKEN = "FAKETOKEN"
     SQLALCHEMY_DATABASE_URI = (
         f"sqlite:///{Path(__file__).parents[1]}/testing.db"
     )
