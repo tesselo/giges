@@ -1,0 +1,63 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - python-requests/2.26.0
+      X-Asana-Client-Lib:
+      - language=Python&version=0.10.3&language_version=3.8.11&os=Linux&os_version=5.13.5-zen1-1-zen
+    method: DELETE
+    uri: https://app.asana.com/api/1.0/webhooks/1200890863508545
+  response:
+    body:
+      string: '{"data":{}}'
+    headers:
+      Asana-Change:
+      - name=new_user_task_lists;info=https://forum.asana.com/t/update-on-our-planned-api-changes-to-user-task-lists-a-k-a-my-tasks/103828
+      Cache-Control:
+      - no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '11'
+      Content-Security-Policy:
+      - report-uri https://app.asana.com/-/csp_report?report_only=false;default-src
+        'none';frame-src 'none';frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Datacenter-Time-End:
+      - '1630418637.013'
+      Date:
+      - Tue, 31 Aug 2021 14:03:57 GMT
+      Server:
+      - nginx
+      Set-Cookie:
+      - TooBusyRedirectCount=0
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      X-Asana-Api-Version:
+      - '1.0'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-LoadBalancer:
+      - prod-lb012.ec2
+      X-Robots-Tag:
+      - none
+      X-XSS-Protection:
+      - 1; mode=block
+      pragma:
+      - no-cache
+    status:
+      code: 200
+      message: OK
+version: 1

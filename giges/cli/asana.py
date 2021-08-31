@@ -29,7 +29,6 @@ def asana_cli() -> None:
 @with_appcontext
 def list_workspaces() -> None:
     client = create_client()
-    print_response(current_app.config)
     print_response(client.workspaces.get_workspaces())
 
 
@@ -46,7 +45,7 @@ def create_projects_webhook() -> None:
     response = client.webhooks.create(
         resource=current_app.config["ASANA_WORKSPACE"],
         target=f"{current_app.config['SERVER_BASE_URI']}{path}",
-        filters=[{"resource_type": "project"}],
+        filters=[{"resource_type": "project", "action": "added"}],
     )
 
     print_response(response)

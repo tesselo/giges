@@ -1,0 +1,82 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+      X-Asana-Client-Lib:
+      - language=Python&version=0.10.3&language_version=3.8.11&os=Linux&os_version=5.13.5-zen1-1-zen
+    method: GET
+    uri: https://app.asana.com/api/1.0/projects?limit=50&workspace=1199978051314275
+  response:
+    body:
+      string: '{"data":[{"gid":"1199978109451180","name":"P - E-REDES","resource_type":"project"},{"gid":"1199981566421930","name":"P
+        - CELPA","resource_type":"project"},{"gid":"1200041979613506","name":"P -
+        Portucel MZ","resource_type":"project"},{"gid":"1200473910322376","name":"P
+        - Green Himalayas","resource_type":"project"},{"gid":"1200215485992217","name":"P
+        - rePLANT","resource_type":"project"},{"gid":"1200041979613509","name":"P
+        - ESB","resource_type":"project"},{"gid":"1200078739257479","name":"P - Livelihood","resource_type":"project"},{"gid":"1200041979613516","name":"P
+        - TEPCO","resource_type":"project"},{"gid":"1200048944476906","name":"P -
+        Hitachi","resource_type":"project"},{"gid":"1200123548743982","name":"Vitor
+        Onboarding","resource_type":"project"},{"gid":"1200802773613549","name":"Platform
+        Workflow","resource_type":"project"},{"gid":"1200150717156531","name":"Frontend
+        Workflow","resource_type":"project"},{"gid":"1200123548743997","name":"Catalog","resource_type":"project"},{"gid":"1200123621762818","name":"ESB
+        Vegetation Height","resource_type":"project"},{"gid":"1200124700775176","name":"P
+        - Decartes","resource_type":"project"},{"gid":"1200163108335600","name":"Corporate
+        Website (tesselo.com)","resource_type":"project"},{"gid":"1200164034745984","name":"Market
+        Strategy","resource_type":"project"},{"gid":"1200164034745963","name":"Branding","resource_type":"project"},{"gid":"1200164034745989","name":"Media","resource_type":"project"},{"gid":"1200194276900000","name":"Market
+        Intelligence","resource_type":"project"},{"gid":"1200194276900006","name":"Recruitment","resource_type":"project"},{"gid":"1200245867679912","name":"Lloyd''s
+        Lab","resource_type":"project"},{"gid":"1200260224762164","name":"P - TNC","resource_type":"project"},{"gid":"1200371946079844","name":"OOO
+        Master","resource_type":"project"},{"gid":"1200446105155950","name":"OOO Daniel
+        Moreno","resource_type":"project"},{"gid":"1200498317549234","name":"Knowledge
+        Workflow","resource_type":"project"},{"gid":"1200570555980604","name":"Idea
+        Formation Workflow","resource_type":"project"},{"gid":"1200731538979465","name":"Battle
+        Cards","resource_type":"project"},{"gid":"1200737627306340","name":"Irani
+        Labs","resource_type":"project"},{"gid":"1200751806827542","name":"e-shape
+        Call for EO-based products 2021","resource_type":"project"},{"gid":"1200760102809917","name":"Data
+        Science Workflow","resource_type":"project"},{"gid":"1200854732538212","name":"Just
+        a project","resource_type":"project"}],"next_page":null}'
+    headers:
+      Asana-Change:
+      - name=new_user_task_lists;info=https://forum.asana.com/t/update-on-our-planned-api-changes-to-user-task-lists-a-k-a-my-tasks/103828
+      Connection:
+      - keep-alive
+      Content-Security-Policy:
+      - report-uri https://app.asana.com/-/csp_report?report_only=false;default-src
+        'none';frame-src 'none';frame-ancestors 'none'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Datacenter-Time-End:
+      - '1630416020.173'
+      Date:
+      - Tue, 31 Aug 2021 13:20:20 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Asana-Api-Version:
+      - '1.1'
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-LoadBalancer:
+      - prod-lb001.ec2
+      X-Robots-Tag:
+      - none
+      X-XSS-Protection:
+      - 1; mode=block
+      content-length:
+      - '2510'
+    status:
+      code: 200
+      message: OK
+version: 1
