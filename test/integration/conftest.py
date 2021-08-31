@@ -25,6 +25,11 @@ def app(connexion_app):
 
 
 @pytest.fixture
+def cli_runner(app):
+    yield app.test_cli_runner()
+
+
+@pytest.fixture
 def client(app):
     with app.test_client() as client:
         yield client
@@ -55,3 +60,11 @@ def transactional_db(_db):
     for table in reversed(_db.metadata.sorted_tables):
         _db.session.execute(table.delete())
     _db.session.commit()
+
+
+@pytest.fixture(scope="module")
+def vcr_config():
+    return {
+        "decode_compressed_response": True,
+        "filter_headers": ["authorization"],
+    }

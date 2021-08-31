@@ -16,14 +16,13 @@ class BaseSettings:
 
     # Integrations
     SENTRY_URI = ""
-    ASANA_WORKSPACE = ""
     ASANA_TOKEN = os.environ.get("ASANA_TOKEN", "")
+    ASANA_WORKSPACE = "1199978051314275"
 
 
 class ProductionSettings(BaseSettings):
     ENVIRONMENT = "production"
 
-    ASANA_WORKSPACE = "1199978051314275"
     SERVER_BASE_URI = "https://integrations.tesselo.com"
     SENTRY_URI = "https://ec9a91e1ce0e40f59388c665c092dc2a@o640190.ingest.sentry.io/5911249"  # noqa: E501
 
@@ -31,7 +30,7 @@ class ProductionSettings(BaseSettings):
 class StagingSettings(BaseSettings):
     ENVIRONMENT = "staging"
 
-    ASANA_WORKSPACE = "1200469161331386"
+    ASANA_WORKSPACE = "1199978051314275"
     SERVER_BASE_URI = "https://integrations-staging.tesselo.com"
 
 
