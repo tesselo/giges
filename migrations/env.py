@@ -13,6 +13,8 @@ from alembic import context
 from flask import current_app
 from sqlalchemy import engine_from_config, pool
 
+from migrations.utils import is_sqlite
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -86,6 +88,7 @@ def run_migrations_online() -> None:
         process_revision_directives=process_revision_directives,
         include_schemas=True,
         compare_type=True,
+        render_as_batch=is_sqlite(),
         **current_app.extensions["migrate"].configure_args,
     )
 
