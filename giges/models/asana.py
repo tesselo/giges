@@ -43,6 +43,15 @@ class Project(db.Model, UUIDMixin):
 class Webhook(db.Model, UUIDMixin):
     __tablename__ = "asana_webhook"
 
+    project_id = db.Column(
+        CHAR(36),
+        ForeignKey(
+            "asana_project.id",
+            deferrable=True,
+            initially="DEFERRED",
+            name="asana_webhook_project_fk",
+        ),
+    )
     external_id = db.Column(
         String,
         index=True,
@@ -62,6 +71,8 @@ class Webhook(db.Model, UUIDMixin):
         String,
         doc="Secret used to verify the hash of received events",
     )
+
+    project = relationship("Project")
 
 
 class Event(db.Model, UUIDMixin):
