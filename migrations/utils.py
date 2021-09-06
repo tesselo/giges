@@ -4,7 +4,8 @@ config = context.config
 
 
 def is_sqlite() -> bool:
-    """We need to know if we are on SQLite on every migration.
+    """
+    We need to know if we are on SQLite on every migration.
 
     Why? Good question, but it is risky to know the answer
 

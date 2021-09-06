@@ -6,19 +6,58 @@ import structlog
 from connexion import request
 
 from giges.db import db
-from giges.models.asana import Event, Webhook
+from giges.models.asana import Event, Project, Webhook
 
 logger = structlog.get_logger(__name__)
 
 
-def projects() -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
+def task_webhook(
+    project_id: str,
+) -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
     """
-    Handle incoming webhooks from asana related to projects.
+    Handle incoming webhooks of modified tasks from an asana project.
+
+    :param project_id: the external (asana) ID of the project
+    :return: - a tuple with an empty body and the status
+             - a tuple with an empty body, the status and the handshake header
+    """
+    webhook = Webhook.query.filter_by(path=request.path).one_or_none()
+    if not webhook:
+        return {"msg": "The webhook was not configured"}, 404
+    project = Project.query.filter_by(external_id=project_id).one_or_none()
+    if not project:
+        return {"msg": "The project was not configured"}, 404
+    if webhook.project != project:
+        return {"msg": "The webhook does not match the targeted project"}, 400
+    return handle_webhook(webhook)
+
+
+def project_webhook() -> Union[
+    Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]
+]:
+    """
+    Handle incoming webooks of new projects from asana.
+
+    :return: - a tuple with an empty body and the status
+             - a tuple with an empty body, the status and the handshake header
+    """
+    webhook = Webhook.query.filter_by(path=request.path).one_or_none()
+    if not webhook:
+        return {"msg": "The webhook was not configured"}, 404
+    return handle_webhook(webhook)
+
+
+def handle_webhook(
+    webhook: Webhook,
+) -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
+    """
+    Handle incoming webhooks from asana.
 
     When registering a webhook, asana will first send a request with a secret,
     X-Hook-Secret, that we use to verify the authenticity of the rest of the
     webhooks requests using X-Hook-Signature.
 
+    :param webhook: the instance of the webhook in Giges
     :return: - a tuple with an empty body and the status
              - a tuple with an empty body, the status and the handshake header
     """
@@ -27,9 +66,6 @@ def projects() -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
 
     if not secret and not signature:
         return {"msg": "Invalid parameters"}, 400
-    webhook = Webhook.query.filter_by(path=request.path).one_or_none()
-    if not webhook:
-        return {"msg": "The webhook was not configured"}, 404
     if secret:
         if webhook.secret:
             logger.warning(

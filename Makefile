@@ -29,6 +29,7 @@ mypy:
 	cat .mypy_reports/index.txt
 
 coverage:
+	GIGES_SETTINGS=giges.settings.TestingSettings \
 	python -m pytest --cov=giges --cov-report term --cov-report html:reports/coverage-integration --cov-report term:skip-covered
 
 
