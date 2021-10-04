@@ -3,6 +3,7 @@ from typing import Dict, Generator, List, Union
 
 import asana
 import click
+import dateutil
 from flask import current_app
 from flask.cli import with_appcontext
 
@@ -19,7 +20,7 @@ def create_client() -> asana.Client:
     return asana.Client.access_token(current_app.config["ASANA_TOKEN"])
 
 
-def print_response(response: Union[Generator, List]) -> None:
+def print_response(response: Union[Generator, List, Dict]) -> None:
     """
     Beautifully prints responses from Asana.
 
@@ -174,8 +175,8 @@ def add_projects(add_all: bool = False) -> None:
                 p = Project(
                     external_id=project["gid"],
                     name=project["name"],
-                    created_at=project["created_at"],
-                    updated_at=project["modified_at"],
+                    created_at=dateutil.parser.parse(project["created_at"]),
+                    updated_at=dateutil.parser.parse(project["modified_at"]),
                 )
                 db.session.add(p)
                 added += 1
@@ -195,6 +196,47 @@ def show_project(project_id: str) -> None:
     """
     client = create_client()
     print_response(client.projects.find_by_id(project_id))
+
+
+@asana_cli.command(help="Show all information about a single task")
+@click.argument("task_id", required=True)
+@with_appcontext
+def show_task(task_id: str) -> None:
+    """
+    Retrieve and print a single Asana task accessible by the token.
+
+    :param task_id: the external (Asana) ID of the task
+    """
+    client = create_client()
+    print_response(client.tasks.find_by_id(task_id))
+
+
+@asana_cli.command(help="Generate Custom field mappings")
+@click.argument("project_id", required=True)
+@with_appcontext
+def generate_custom_field_dicts(project_id: str) -> None:
+    """
+    Retrieve the custom fields from an Asana project
+    and build a dictionary with the mappings that we
+    will use to save the information into our database.
+
+    :param project_id: the external (Asana) ID of the project
+    """
+    client = create_client()
+    response = client.projects.find_by_id(project_id)
+    custom_fields = {}
+    for setting in response.get("custom_field_settings", []):
+        field = setting["custom_field"]
+        if field["type"] == "enum":
+            # Only the enums need mappings
+            options = {}
+            for option in field.get("enum_options", []):
+                options[option["gid"]] = option["name"]
+            custom_fields[field["gid"]] = {
+                "name": field["name"],
+                "options": options,
+            }
+    print_response(custom_fields)
 
 
 @asana_cli.command(help="Delete a currently configured Asana webhook")
