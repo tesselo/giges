@@ -57,6 +57,7 @@ jobs:
          python -m pip install --upgrade pip virtualenv
          virtualenv -p /usr/bin/python3 ./giges-venv
          source ./giges-venv/bin/activate
+         pip install setuptools==57.5.0
          pip install -r ./giges/requirements.txt
          pip install -r ./giges/dev_requirements.txt
 
