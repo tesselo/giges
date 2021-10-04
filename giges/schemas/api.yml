@@ -63,26 +63,6 @@ paths:
                 properties:
                   pong:
                     type: boolean
-  /asana/projects:
-    post:
-      tags: [Asana]
-      operationId: giges.handlers.asana.project_webhook
-      summary: Asana Project webhook
-      parameters:
-        - $ref: '#/components/parameters/HookSecretHeader'
-        - $ref: '#/components/parameters/HookSignatureHeader'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              anyOf:
-                - $ref: '#/components/schemas/AsanaEventWebhookBody'
-                - $ref: '#/components/schemas/AsanaEventWebhookEmptyBody'
-      responses:
-        204:
-          description: 'Webhook handled correctly'
-        400:
-          description: 'Webhook handling format error'
   /asana/projects/{project_id}:
     post:
       tags: [Asana]
