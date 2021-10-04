@@ -84,3 +84,41 @@ def test_asana_cli_delete_webhook(cli_runner):
     )
 
     assert result.exit_code == 0
+
+
+@pytest.mark.vcr
+def test_asana_cli_add_projects(cli_runner):
+    result = cli_runner.invoke(args=["asana", "add-projects"])
+
+    print("holi")
+    assert result.exit_code == 0
+    assert "new projects added" in result.output
+
+
+@pytest.mark.vcr
+def test_asana_cli_show_project(cli_runner):
+    result = cli_runner.invoke(
+        args=["asana", "show-project", "1200150717156531"]
+    )
+
+    assert result.exit_code == 0
+    assert "Frontend Workflow" in result.output
+
+
+@pytest.mark.vcr
+def test_asana_cli_show_task(cli_runner):
+    result = cli_runner.invoke(args=["asana", "show-task", "1201046407912294"])
+
+    assert result.exit_code == 0
+    assert "webhook subscriptions" in result.output
+
+
+@pytest.mark.vcr
+def test_asana_cli_generate_custom_field_dicts(cli_runner):
+    result = cli_runner.invoke(
+        args=["asana", "generate-custom-field-dicts", "1200802773613549"]
+    )
+
+    assert result.exit_code == 0
+    assert "Priority" in result.output
+    assert "Timebomb" in result.output
