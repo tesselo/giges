@@ -19,14 +19,14 @@ depends_on = ${repr(depends_on)}
 
 
 def upgrade() -> None:
-    if is_sqlite():
-        ${upgrades if upgrades else "pass"}
-    else:
-        pass
+    # if is_sqlite():
+    ${upgrades if upgrades else "pass"}
+    # else:
+    #     pass
 
 
 def downgrade() -> None:
-    if is_sqlite():
-        ${downgrades if downgrades else "pass"}
-    else:
-        pass
+    # if is_sqlite():
+    ${downgrades if downgrades else "pass"}
+    # else:
+    #     pass
