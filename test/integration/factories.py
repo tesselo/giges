@@ -1,4 +1,4 @@
-from factory import Faker, SubFactory
+from factory import Faker, LazyAttribute, SubFactory
 from factory.alchemy import SQLAlchemyModelFactory
 from factory.fuzzy import FuzzyChoice, FuzzyText
 from faker.providers import date_time
@@ -9,18 +9,6 @@ from giges.models.asana import Event, Project, ResourceTypeEnum, Webhook
 Faker.add_provider(date_time)
 
 
-class WebhookFactory(SQLAlchemyModelFactory):
-    external_id = FuzzyText(chars="0123456789")
-    path = "/asana/projects"
-    resource_type = FuzzyChoice(choices=ResourceTypeEnum)
-    secret = FuzzyText()
-
-    class Meta:
-        model = Webhook
-        sqlalchemy_session = db.session
-        sqlalchemy_session_persistence = "commit"
-
-
 class ProjectFactory(SQLAlchemyModelFactory):
     external_id = FuzzyText(chars="0123456789")
     name = FuzzyText()
@@ -29,6 +17,19 @@ class ProjectFactory(SQLAlchemyModelFactory):
 
     class Meta:
         model = Project
+        sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = "commit"
+
+
+class WebhookFactory(SQLAlchemyModelFactory):
+    project = SubFactory(ProjectFactory)
+    external_id = FuzzyText(chars="0123456789")
+    path = LazyAttribute(lambda w: f"/asana/projects/{w.project.external_id}")
+    resource_type = FuzzyChoice(choices=ResourceTypeEnum)
+    secret = FuzzyText()
+
+    class Meta:
+        model = Webhook
         sqlalchemy_session = db.session
         sqlalchemy_session_persistence = "commit"
 
