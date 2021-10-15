@@ -93,8 +93,12 @@ def create_connexion_app(
     from giges.cli.asana import (  # pylint: disable=import-outside-toplevel
         asana_cli,
     )
+    from giges.cli.team import (  # pylint: disable=import-outside-toplevel
+        team_cli,
+    )
 
     flask_app.cli.add_command(asana_cli)
+    flask_app.cli.add_command(team_cli)
 
     return connexion_app
 
