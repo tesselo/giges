@@ -12,41 +12,46 @@ attrs==21.2.0
     #   semgrep
 backports.entry-points-selectable==1.1.0
     # via virtualenv
-black==21.8b0
+black==21.9b0
     # via -r dev_requirements.in
-boto3==1.18.32
+boto3==1.18.62
     # via -r dev_requirements.in
-botocore==1.21.32
+botocore==1.21.62
     # via
     #   boto3
     #   s3transfer
 bracex==2.1.1
     # via wcmatch
-certifi==2021.5.30
+certifi==2021.10.8
     # via requests
 cfgv==3.3.1
     # via pre-commit
-charset-normalizer==2.0.4
+charset-normalizer==2.0.7
     # via requests
-click==8.0.1
-    # via black
+click==8.0.3
+    # via
+    #   black
+    #   click-option-group
+    #   semgrep
+click-option-group==0.5.3
+    # via semgrep
 colorama==0.4.4
     # via semgrep
-coverage==5.5
+coverage[toml]==6.0.2
     # via pytest-cov
-distlib==0.3.2
+distlib==0.3.3
     # via virtualenv
 factory-boy==3.2.0
     # via pytest-factoryboy
-faker==8.12.1
+faker==9.3.1
     # via factory-boy
-filelock==3.0.12
+filelock==3.3.1
     # via virtualenv
-flake8==3.9.2
+flake8==4.0.1
     # via -r dev_requirements.in
-identify==2.2.13
+identify==2.3.0
     # via pre-commit
-idna==3.2
+idna==3.3
     # via
     #   requests
     #   yarl
@@ -64,7 +69,7 @@ lxml==4.6.3
     # via -r dev_requirements.in
 mccabe==0.6.1
     # via flake8
-multidict==5.1.0
+multidict==5.2.0
     # via yarl
 mypy==0.910
     # via -r dev_requirements.in
@@ -82,19 +87,19 @@ pathspec==0.9.0
     # via black
 peewee==3.14.4
     # via semgrep
-platformdirs==2.3.0
+platformdirs==2.4.0
     # via
     #   black
     #   virtualenv
 pluggy==1.0.0
     # via pytest
-pre-commit==2.14.1
+pre-commit==2.15.0
     # via -r dev_requirements.in
 py==1.10.0
     # via pytest
-pycodestyle==2.7.0
+pycodestyle==2.8.0
     # via flake8
-pyflakes==2.3.1
+pyflakes==2.4.0
     # via flake8
 pyparsing==2.4.7
     # via packaging
@@ -106,7 +111,7 @@ pytest==6.2.5
     #   pytest-cov
     #   pytest-factoryboy
     #   pytest-recording
-pytest-cov==2.12.1
+pytest-cov==3.0.0
     # via -r dev_requirements.in
 pytest-factoryboy==2.1.0
     # via -r dev_requirements.in
@@ -116,11 +121,11 @@ python-dateutil==2.8.2
     # via
     #   botocore
     #   faker
-pyyaml==5.4.1
+pyyaml==6.0
     # via
     #   pre-commit
     #   vcrpy
-regex==2021.8.28
+regex==2021.10.8
     # via black
 requests==2.26.0
     # via semgrep
@@ -130,7 +135,7 @@ ruamel.yaml.clib==0.2.6
     # via ruamel.yaml
 s3transfer==0.5.0
     # via boto3
-semgrep==0.63.0
+semgrep==0.69.1
     # via -r dev_requirements.in
 six==1.16.0
     # via
@@ -145,28 +150,29 @@ toml==0.10.2
     #   mypy
     #   pre-commit
     #   pytest
-    #   pytest-cov
 tomli==1.2.1
-    # via black
-tqdm==4.62.2
+    # via
+    #   black
+    #   coverage
+tqdm==4.62.3
     # via semgrep
 typing-extensions==3.10.0.2
     # via
     #   black
     #   mypy
-urllib3==1.26.6
+urllib3==1.26.7
     # via
     #   botocore
     #   requests
 vcrpy==4.1.1
     # via pytest-recording
-virtualenv==20.7.2
+virtualenv==20.8.1
     # via pre-commit
 wcmatch==8.2
     # via semgrep
-wrapt==1.12.1
+wrapt==1.13.2
     # via vcrpy
-yarl==1.6.3
+yarl==1.7.0
     # via vcrpy
 
 # The following packages are considered to be unsafe in a requirements file:

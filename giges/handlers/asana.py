@@ -3,7 +3,7 @@ import hmac
 from typing import Any, Dict, List, Tuple, Union
 
 import asana
-import dateutil
+import iso8601
 import structlog
 from connexion import request
 from flask import current_app
@@ -35,9 +35,7 @@ def update_task(task: Task, asana_task: Dict[str, Any]) -> TaskChange:
     """
     task.completed = asana_task.get("completed")
     if asana_task.get("completed_at"):
-        task.completed_at = dateutil.parser.parse(
-            asana_task.get("completed_at")
-        )
+        task.completed_at = iso8601.parse_date(asana_task.get("completed_at"))
     task.name = asana_task.get("name")
     task.description = asana_task.get("description")
     if len(asana_task["memberships"]):
