@@ -18,6 +18,8 @@ class BaseSettings:
     SENTRY_URI = ""
     ASANA_TOKEN = os.environ.get("ASANA_TOKEN", "")
     ASANA_WORKSPACE = "1199978051314275"
+    SLACK_TOKEN = os.environ.get("SLACK_TOKEN", "")
+    SLACK_BLOCKS_CHANNEL = ""
 
 
 class ProductionSettings(BaseSettings):
@@ -25,13 +27,14 @@ class ProductionSettings(BaseSettings):
 
     SERVER_BASE_URI = "https://integrations.tesselo.com"
     SENTRY_URI = "https://ec9a91e1ce0e40f59388c665c092dc2a@o640190.ingest.sentry.io/5911249"  # noqa: E501
+    SLACK_BLOCKS_CHANNEL = "C02GXT5UY22"
 
 
 class StagingSettings(BaseSettings):
     ENVIRONMENT = "staging"
 
-    ASANA_WORKSPACE = "1199978051314275"
     SERVER_BASE_URI = "https://integrations-staging.tesselo.com"
+    SLACK_BLOCKS_CHANNEL = "C021VUWGA3E"  # dev-null
 
 
 class DevelopmentSettings(BaseSettings):
@@ -41,6 +44,7 @@ class DevelopmentSettings(BaseSettings):
     SQLALCHEMY_DATABASE_URI = os.getenv("GIGES_DATABASE_URI") or (
         "postgresql://postgres@localhost:5432/giges_dev"
     )
+    SLACK_BLOCKS_CHANNEL = "C021VUWGA3E"  # dev-null
 
 
 class TestingSettings(BaseSettings):
