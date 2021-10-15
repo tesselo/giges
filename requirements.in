@@ -5,6 +5,7 @@ flask-sqlalchemy
 psycopg2-binary
 zappa
 sentry-sdk[flask]
+slack-sdk
 structlog
 
 # All the package restrictions are due to zappa :(
