@@ -9,6 +9,12 @@
       "certificate_arn": "arn:aws:acm:us-east-1:595064993071:certificate/3cac1dfe-5915-4325-91fa-a53952cbd2e1",
       "log_level": "INFO",
       "slim_handler": true,
+      "events": [
+        {
+          "function": "giges.tasks.asana.daily_stick",
+          "expression": "cron(0 9 ? * MON-FRI *)"
+        }
+      ],
       "environment_variables": {
         "GIGES_SETTINGS": "giges.settings.StagingSettings"
       }
