@@ -14,11 +14,11 @@ attrs==21.2.0
     # via jsonschema
 blinker==1.4
     # via sentry-sdk
-boto3==1.18.59
+boto3==1.18.62
     # via
     #   kappa
     #   zappa
-botocore==1.21.59
+botocore==1.21.62
     # via
     #   boto3
     #   s3transfer
@@ -64,7 +64,7 @@ greenlet==1.1.2
     # via sqlalchemy
 hjson==3.0.2
     # via zappa
-idna==3.2
+idna==3.3
     # via requests
 importlib-metadata==4.8.1
     # via alembic
@@ -72,6 +72,8 @@ importlib-resources==5.2.2
     # via alembic
 inflection==0.5.1
     # via connexion
+iso8601==0.1.16
+    # via -r requirements.in
 isodate==0.6.0
     # via openapi-schema-validator
 itsdangerous==1.1.0
@@ -106,7 +108,7 @@ openapi-spec-validator==0.3.1
     # via connexion
 pep517==0.11.0
     # via pip-tools
-pip-tools==6.3.1
+pip-tools==6.4.0
     # via zappa
 placebo==0.10.0
     # via kappa
@@ -120,7 +122,7 @@ python-dateutil==2.8.2
     #   zappa
 python-slugify==5.0.2
     # via zappa
-pyyaml==5.4.1
+pyyaml==6.0
     # via
     #   cfn-flip
     #   clickclick
@@ -155,7 +157,7 @@ sqlalchemy==1.4.25
     #   alembic
     #   dictalchemy
     #   flask-sqlalchemy
-structlog==21.1.0
+structlog==21.2.0
     # via -r requirements.in
 swagger-ui-bundle==0.0.9
     # via connexion
@@ -167,10 +169,8 @@ tomli==1.2.1
     # via pep517
 tqdm==4.62.3
     # via zappa
-troposphere==2.7.1
-    # via
-    #   -r requirements.in
-    #   zappa
+troposphere==3.0.3
+    # via zappa
 urllib3==1.26.7
     # via
     #   botocore
@@ -186,7 +186,7 @@ wheel==0.37.0
     #   zappa
 wsgi-request-logger==0.4.6
     # via zappa
-zappa==0.53.0
+zappa==0.54.0
     # via -r requirements.in
 zipp==3.6.0
     # via

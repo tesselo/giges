@@ -3,7 +3,7 @@ from typing import Dict, Generator, List, Union
 
 import asana
 import click
-import dateutil
+import iso8601
 from flask import current_app
 from flask.cli import with_appcontext
 
@@ -175,8 +175,8 @@ def add_projects(add_all: bool = False) -> None:
                 p = Project(
                     external_id=project["gid"],
                     name=project["name"],
-                    created_at=dateutil.parser.parse(project["created_at"]),
-                    updated_at=dateutil.parser.parse(project["modified_at"]),
+                    created_at=iso8601.parse_date(project["created_at"]),
+                    updated_at=iso8601.parse_date(project["modified_at"]),
                 )
                 db.session.add(p)
                 added += 1

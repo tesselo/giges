@@ -1,5 +1,6 @@
 asana
 dictalchemy
+iso8601
 flask-migrate
 flask-sqlalchemy
 psycopg2-binary
@@ -9,6 +10,5 @@ slack-sdk
 structlog
 
 # All the package restrictions are due to zappa :(
-troposphere<3
 flask==1.1.4
 connexion[swagger-ui]==2.7.0
