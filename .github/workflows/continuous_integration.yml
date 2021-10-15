@@ -65,6 +65,21 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     needs: [python_dependencies]
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: giges_test
+          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_USER: giges
+        ports:
+          - 5432/tcp
+        # set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout giges
         uses: actions/checkout@v2
@@ -81,6 +96,8 @@ jobs:
           source ./giges-venv/bin/activate
           cd giges && python -m pytest test
         env:
+          GIGES_DATABASE_URI: >-
+            postgresql://giges:postgres_password@localhost:${{ job.services.postgres.ports[5432] }}/giges_test
           GIGES_SETTINGS: giges.settings.TestingSettings
   deploy-staging:
     name: Deploy to Staging
