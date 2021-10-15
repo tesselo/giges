@@ -8,7 +8,6 @@ Create Date: ${create_date}
 from alembic import op
 import sqlalchemy as sa
 
-from migrations.utils import is_sqlite
 ${imports if imports else ""}
 
 # revision identifiers, used by Alembic.
@@ -19,14 +18,8 @@ depends_on = ${repr(depends_on)}
 
 
 def upgrade() -> None:
-    # if is_sqlite():
     ${upgrades if upgrades else "pass"}
-    # else:
-    #     pass
 
 
 def downgrade() -> None:
-    # if is_sqlite():
     ${downgrades if downgrades else "pass"}
-    # else:
-    #     pass

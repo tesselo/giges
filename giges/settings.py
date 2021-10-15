@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 from typing import Dict
 
 
@@ -39,8 +38,8 @@ class DevelopmentSettings(BaseSettings):
     ENVIRONMENT = "development"
     DEBUG = True
     SERVER_BASE_URI = "http://localhost:8080"
-    SQLALCHEMY_DATABASE_URI = (
-        f"sqlite:///{Path(__file__).parents[1]}/development.db"
+    SQLALCHEMY_DATABASE_URI = os.getenv("GIGES_DATABASE_URI") or (
+        "postgresql://postgres@localhost:5432/giges_dev"
     )
 
 
@@ -48,8 +47,8 @@ class TestingSettings(BaseSettings):
     ENVIRONMENT = "testing"
     SERVER_BASE_URI = "http://localhost:8080"
     ASANA_TOKEN = "FAKETOKEN"
-    SQLALCHEMY_DATABASE_URI = (
-        f"sqlite:///{Path(__file__).parents[1]}/testing.db"
+    SQLALCHEMY_DATABASE_URI = os.getenv("GIGES_DATABASE_URI") or (
+        "postgresql://postgres@localhost:5432/giges_test"
     )
 
 
