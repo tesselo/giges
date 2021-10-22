@@ -8,4 +8,7 @@ pytest-cov
 pytest-factoryboy
 pytest-recording
 mypy
-semgrep
+semgrep<0.65.0
+bandit
+wily
+pydocstyle

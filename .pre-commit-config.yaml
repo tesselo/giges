@@ -32,3 +32,11 @@ repos:
       - id: commitlint
         stages: [commit-msg]
         additional_dependencies: ['@commitlint/config-conventional']
+
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.1.1
+    hooks:
+      - id: pydocstyle
+        args:
+          - --ignore=D100,D101,D102,D103,D104,D105,D106,D107,D200,D202,D205,D212,D213,D400,D401,D415
+          - --match-dir="[^(\.|migrations)].*"
