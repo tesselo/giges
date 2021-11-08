@@ -4,7 +4,6 @@ from flask.cli import with_appcontext
 from giges.db import db
 from giges.models.asana import Project
 from giges.models.team import Team, Tessera
-from giges.tasks.asana import daily_stick
 
 
 @click.group(name="team", help="Manage team knowledge in giges")
@@ -120,10 +119,3 @@ def remove_project_from_team(project_id: str, team_id: str) -> None:
     team.tesseras.remove(project)
     db.session.add(team)
     db.session.commit()
-
-
-@team_cli.command(help="Pokes the team")
-@click.argument("team_id", type=str, required=True)
-@with_appcontext
-def stick(team_id: str) -> None:
-    daily_stick(team_id)
