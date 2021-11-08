@@ -1,11 +1,11 @@
 from typing import Dict, List
 
 import asana
-from flask import current_app
-from zappa.asynchronous import task
 
 from giges.models.team import Team
 from giges.slack import SlackClient
+from giges.tasks.app import app
+from giges.util import validate_uuid
 
 
 def _add_ds_class_item(custom_field: Dict[str, str]) -> str:
@@ -63,8 +63,16 @@ def _add_class_of_service(custom_field: Dict[str, str]) -> str:
     return f'{emojis.get(custom_field["gid"], ":chipmunk:")} '
 
 
-@task
 def daily_stick(team_id: str = None) -> None:
+    """
+    Wrap the stick inside the app context to be called from SNS
+    :param team_id: the giges UUID of the team
+    """
+    with app.app_context():
+        stick(team_id)
+
+
+def stick(team_id: str = None) -> None:
     """
     For all the projects that belongs to a team:
         - list all the current tasks
@@ -73,15 +81,16 @@ def daily_stick(team_id: str = None) -> None:
 
     :param team_id: the giges UUID of the team
     """
-    asana_client = asana.Client.access_token(current_app.config["ASANA_TOKEN"])
+    asana_client = asana.Client.access_token(app.config["ASANA_TOKEN"])
     slack_client = SlackClient()
-    workspace_id = current_app.config["ASANA_WORKSPACE"]
+    workspace_id = app.config["ASANA_WORKSPACE"]
 
-    if team_id is None:
+    if validate_uuid(team_id):
+        team = Team.query.filter_by(id=team_id).one_or_none()
+    else:
         # Search for the Tech team by default
         team = Team.query.filter_by(name="Tech").one_or_none()
-    else:
-        team = Team.query.get(team_id)
+
     projects_ids = [p.external_id for p in team.projects]
 
     for human in team.tesseras:
