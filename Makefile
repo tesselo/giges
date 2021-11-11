@@ -44,6 +44,7 @@ check: pre-commit  mypy coverage
 .PHONY: smells security complexity check-advanced check-extended
 
 smells:
+	pip install semgrep
 	semgrep --config=p/r2c-ci --config=p/flask
 
 security:
