@@ -111,6 +111,25 @@ def create_tasks_webhook(project_id: str) -> None:
     )
 
 
+@asana_cli.command(help="Configure a webhook for the customer workflow")
+@click.argument("project_id", required=False)
+@with_appcontext
+def create_customer_workflow_webhook(project_id: str = None) -> None:
+    """
+    Create the customer workflow webhook
+    """
+    project_id = project_id or "1201153224707672"
+    _register_webhook(
+        f"/asana/workflows/{project_id}",
+        project_id,
+        {
+            "resource_type": ResourceTypeEnum.task,
+            "action": "changed",
+            "fields": ["membership"],
+        },
+    )
+
+
 @asana_cli.command(help="List currently configured Asana webhooks")
 @with_appcontext
 def list_webhooks() -> None:

@@ -8,7 +8,4 @@ zappa
 sentry-sdk[flask]
 slack-sdk
 structlog
-
-# All the package restrictions are due to zappa :(
-flask==1.1.4
-connexion[swagger-ui]==2.7.0
+connexion[swagger-ui]

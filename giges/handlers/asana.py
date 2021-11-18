@@ -1,6 +1,6 @@
 import hashlib
 import hmac
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Callable, Dict, List, Tuple, Union
 
 import asana
 import iso8601
@@ -73,17 +73,65 @@ def handle_task_events(
     db.session.commit()
 
 
+def handle_customer_workflow(
+    webhook: Webhook, events: List[Dict[str, Dict]]
+) -> None:
+    """
+    Resolves events from webhooks into tasks and tasks changes.
+
+    :param webhook: the handled webhook
+    :param events: the list of events given by Asana
+    """
+    task_gids = set()
+    for event in events:
+        task_gids.add(event["resource"]["gid"])
+
+    for task_gid in task_gids:
+        asana_task = retrieve_task_information(task_gid)
+        print(asana_task)
+
+    db.session.add(Event(webhook=webhook, content=events))
+    db.session.commit()
+
+
 def task_webhook(
     project_id: str,
 ) -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
     """
     Handle incoming webhooks of modified tasks from an asana project.
 
+    :param project_id: the external (asana) ID of the project
+    :return: - a tuple with an empty body and the status
+             - a tuple with an empty body, the status and the handshake header
+    """
+    return handle_webhook(project_id, handle_task_events)
+
+
+def customer_webhook(
+    project_id: str,
+) -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
+    """
+    Handle incoming webhooks of the customer workflow changes.
+
+    :param project_id: the external (asana) ID of the project
+    :return: - a tuple with an empty body and the status
+             - a tuple with an empty body, the status and the handshake header
+    """
+    return handle_webhook(project_id, handle_customer_workflow)
+
+
+def handle_webhook(
+    project_id: str, handle_events: Callable
+) -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
+    """
+    Handle the core of incoming webhooks from asana.
+
     When registering a webhook, asana will first send a request with a secret,
     X-Hook-Secret, that we use to verify the authenticity of the rest of the
     webhooks requests using X-Hook-Signature.
 
     :param project_id: the external (asana) ID of the project
+    :param handle_events: the function to handle the events
     :return: - a tuple with an empty body and the status
              - a tuple with an empty body, the status and the handshake header
     """
@@ -134,7 +182,7 @@ def task_webhook(
         return {}, 204
 
     try:
-        handle_task_events(webhook, request.json["events"])
+        handle_events(webhook, request.json["events"])
     except KeyError:
         return {"msg": "Incorrect event format"}, 400
 
