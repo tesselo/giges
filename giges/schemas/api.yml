@@ -91,3 +91,31 @@ paths:
           description: 'Webhook handling format error'
         404:
           description: 'Webhook or Project not configured'
+  /asana/workflows/{project_id}:
+    post:
+      tags: [Asana]
+      operationId: giges.handlers.asana.customer_webhook
+      summary: Asana Workflow webhook
+      parameters:
+        - $ref: '#/components/parameters/HookSecretHeader'
+        - $ref: '#/components/parameters/HookSignatureHeader'
+        - in: path
+          name: project_id
+          description: Asana Project ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/AsanaEventWebhookBody'
+                - $ref: '#/components/schemas/AsanaEventWebhookEmptyBody'
+      responses:
+        204:
+          description: 'Webhook handled correctly'
+        400:
+          description: 'Webhook handling format error'
+        404:
+          description: 'Webhook or Project not configured'
