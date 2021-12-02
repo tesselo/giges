@@ -1,6 +1,6 @@
 import hashlib
 import hmac
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Callable, Dict, List, Tuple, Union
 
 import asana
 import iso8601
@@ -9,9 +9,25 @@ from connexion import request
 from flask import current_app
 
 from giges.db import db
-from giges.models.asana import Event, Project, Task, TaskChange, Webhook
+from giges.models.asana import (
+    Event,
+    Project,
+    ResourceTypeEnum,
+    Task,
+    TaskChange,
+    Webhook,
+)
 
 logger = structlog.get_logger(__name__)
+
+
+def create_client() -> asana.Client:
+    """
+    Initialize and return an Asana sdk object.
+
+    :return: the asana client itself
+    """
+    return asana.Client.access_token(current_app.config["ASANA_TOKEN"])
 
 
 def retrieve_task_information(asana_id: str) -> Dict[str, Any]:
@@ -21,8 +37,41 @@ def retrieve_task_information(asana_id: str) -> Dict[str, Any]:
     :param asana_id: the external (Asana) ID of the task
     :return: the dictionary from the JSON parsed information
     """
-    client = asana.Client.access_token(current_app.config["ASANA_TOKEN"])
+    client = create_client()
     return client.tasks.find_by_id(asana_id)
+
+
+def retrieve_section_tasks(asana_id: str) -> List[Dict[str, Any]]:
+    """
+
+    :param asana_id: the external (Asana) ID of the section
+    :return: the dictionary from the JSON parsed information
+    """
+    client = create_client()
+    return client.get_collection(f"/sections/{asana_id}/tasks", {})
+
+
+def retrieve_subtasks(asana_id: str) -> List[Dict[str, Any]]:
+    """
+
+    :param asana_id: the external (Asana) ID of the task
+    :return: the dictionary from the JSON parsed information
+    """
+    client = create_client()
+    return client.get_collection(f"/tasks/{asana_id}/subtasks", {})
+
+
+def create_task(name: str, project_id: str) -> None:
+    """
+
+    :param name: the name of the future task
+    :param project_id: the external (Asana) ID of the project
+    """
+    client = create_client()
+    client.tasks.create_in_workspace(
+        current_app.config["ASANA_WORKSPACE"],
+        {"name": name, "notes": "Giges was here.", "projects": [project_id]},
+    )
 
 
 def update_task(task: Task, asana_task: Dict[str, Any]) -> TaskChange:
@@ -73,17 +122,93 @@ def handle_task_events(
     db.session.commit()
 
 
+def handle_customer_workflow(
+    webhook: Webhook, events: List[Dict[str, Dict]]
+) -> None:
+    """
+    Resolves events from webhooks into tasks and tasks changes.
+
+    :param webhook: the handled webhook
+    :param events: the list of events given by Asana
+    """
+    task_gids = set()
+    for event in events:
+        task_gid = None
+        # Asana will send the stories with the task directly linked
+        # or with the task in the parent, without a known rule
+        if event.get("task"):
+            task_gid = event["task"]["gid"]
+        if task_gid is None:
+            if event["parent"]["resource_type"] == ResourceTypeEnum.task:
+                task_gid = event["parent"]["gid"]
+        if task_gid:
+            task_gids.add(task_gid)
+
+    # Get all the tasks from the "Template" section of the "Customer Workflow"
+    template_tasks = {
+        t["name"]: t for t in retrieve_section_tasks("1201165296613104")
+    }
+
+    for task_gid in task_gids:
+        asana_task = retrieve_task_information(task_gid)
+        template = None
+        customer_project = None
+        for membership in asana_task["memberships"]:
+            template = template or template_tasks.get(
+                membership["section"]["name"]
+            )
+            if membership["project"]["name"].startswith("P -"):
+                customer_project = membership["project"]["gid"]
+
+        if not template or not customer_project:
+            break
+
+        template_subtasks = retrieve_subtasks(template["gid"])
+        for subtask in template_subtasks:
+            create_task(subtask["name"], customer_project)
+
+    db.session.add(Event(webhook=webhook, content=events))
+    db.session.commit()
+
+
 def task_webhook(
     project_id: str,
 ) -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
     """
     Handle incoming webhooks of modified tasks from an asana project.
 
+    :param project_id: the external (asana) ID of the project
+    :return: - a tuple with an empty body and the status
+             - a tuple with an empty body, the status and the handshake header
+    """
+    return handle_webhook(project_id, handle_task_events)
+
+
+def customer_webhook(
+    project_id: str,
+) -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
+    """
+    Handle incoming webhooks of the customer workflow changes.
+
+    :param project_id: the external (asana) ID of the project
+    :return: - a tuple with an empty body and the status
+             - a tuple with an empty body, the status and the handshake header
+    """
+    return handle_webhook(project_id, handle_customer_workflow)
+
+
+def handle_webhook(
+    project_id: str, handle_events: Callable
+) -> Union[Tuple[Dict, int], Tuple[Dict, int, Dict[str, str]]]:
+    """
+    Handle the core of incoming webhooks from asana.
+
     When registering a webhook, asana will first send a request with a secret,
     X-Hook-Secret, that we use to verify the authenticity of the rest of the
     webhooks requests using X-Hook-Signature.
 
     :param project_id: the external (asana) ID of the project
+    :param handle_events: the function to handle the events
     :return: - a tuple with an empty body and the status
              - a tuple with an empty body, the status and the handshake header
     """
@@ -134,7 +259,7 @@ def task_webhook(
         return {}, 204
 
     try:
-        handle_task_events(webhook, request.json["events"])
+        handle_events(webhook, request.json["events"])
     except KeyError:
         return {"msg": "Incorrect event format"}, 400
 

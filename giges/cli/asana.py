@@ -64,7 +64,10 @@ def _register_webhook(
     """
     client = create_client()
     webhook = Webhook(path=path, resource_type=filter["resource_type"])
-    if webhook.resource_type == ResourceTypeEnum.task:
+    if webhook.resource_type in (
+        ResourceTypeEnum.task,
+        ResourceTypeEnum.story,
+    ):
         project = Project.query.filter_by(external_id=resource).one_or_none()
         webhook.project = project
     db.session.add(webhook)
@@ -108,6 +111,25 @@ def create_tasks_webhook(project_id: str) -> None:
         f"/asana/projects/{project_id}",
         project_id,
         {"resource_type": ResourceTypeEnum.task},
+    )
+
+
+@asana_cli.command(help="Configure a webhook for the customer workflow")
+@click.argument("project_id", required=False)
+@with_appcontext
+def create_customer_workflow_webhook(project_id: str = None) -> None:
+    """
+    Create the customer workflow webhook
+    """
+    project_id = project_id or "1201153224707672"
+    _register_webhook(
+        f"/asana/workflows/{project_id}",
+        project_id,
+        {
+            "resource_type": ResourceTypeEnum.story,
+            "resource_subtype": "section_changed",
+            "action": "added",
+        },
     )
 
 
@@ -198,6 +220,24 @@ def show_project(project_id: str) -> None:
     print_response(client.projects.find_by_id(project_id))
 
 
+@asana_cli.command(help="Show all sections from a single project")
+@click.argument("project_id", required=True)
+@with_appcontext
+def show_sections(project_id: str) -> None:
+    client = create_client()
+    print_response(
+        client.get_collection(f"/projects/{project_id}/sections", {})
+    )
+
+
+@asana_cli.command(help="Show all tasks from a single section")
+@click.argument("section_id", required=True)
+@with_appcontext
+def show_section_tasks(section_id: str) -> None:
+    client = create_client()
+    print_response(client.get_collection(f"/sections/{section_id}/tasks", {}))
+
+
 @asana_cli.command(help="Show all information about a single task")
 @click.argument("task_id", required=True)
 @with_appcontext
@@ -209,6 +249,19 @@ def show_task(task_id: str) -> None:
     """
     client = create_client()
     print_response(client.tasks.find_by_id(task_id))
+
+
+@asana_cli.command(help="Show all information about a single task")
+@click.argument("task_id", required=True)
+@with_appcontext
+def show_subtasks(task_id: str) -> None:
+    """
+    Retrieve and print the subtasks of an Asana task accessible by the token.
+
+    :param task_id: the external (Asana) ID of the task
+    """
+    client = create_client()
+    print_response(client.get_collection(f"/tasks/{task_id}/subtasks", {}))
 
 
 @asana_cli.command(help="Generate Custom field mappings")
