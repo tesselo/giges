@@ -4,6 +4,7 @@ import logging
 from logging.config import fileConfig
 from typing import Any, List
 
+import alembic_autogenerate_enums  # noqa: F401
 from alembic import context
 
 # add your model's MetaData object here
