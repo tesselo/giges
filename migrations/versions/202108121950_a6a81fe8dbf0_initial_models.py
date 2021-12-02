@@ -7,12 +7,23 @@ Create Date: 2021-08-12 19:50:16.079002
 """
 import sqlalchemy as sa
 from alembic import op
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = "a6a81fe8dbf0"
 down_revision = None
 branch_labels = None
 depends_on = None
+
+resource_type_enum = postgresql.ENUM(
+    "custom_field",
+    "enum_option",
+    "project",
+    "task",
+    "webhook",
+    "workspace",
+    name="resource_type_enum",
+)
 
 
 def upgrade() -> None:
@@ -42,15 +53,7 @@ def upgrade() -> None:
         sa.Column("path", sa.String(), nullable=False),
         sa.Column(
             "resource_type",
-            sa.Enum(
-                "custom_field",
-                "enum_option",
-                "project",
-                "task",
-                "webhook",
-                "workspace",
-                name="resource_type_enum",
-            ),
+            resource_type_enum,
             nullable=True,
         ),
         sa.Column("secret", sa.String(), nullable=True),
@@ -95,4 +98,5 @@ def downgrade() -> None:
         op.f("ix_asana_project_external_id"), table_name="asana_project"
     )
     op.drop_table("asana_project")
+    resource_type_enum.drop(op.get_bind())
     # ### end Alembic commands ###

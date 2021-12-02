@@ -23,6 +23,7 @@ class ResourceTypeEnum(str, enum.Enum):
     enum_option = "enum_option"
     project = "project"
     task = "task"
+    story = "story"
     webhook = "webhook"
     workspace = "workspace"
 
