@@ -61,16 +61,26 @@ def retrieve_subtasks(asana_id: str) -> List[Dict[str, Any]]:
     return client.get_collection(f"/tasks/{asana_id}/subtasks", {})
 
 
-def create_task(name: str, project_id: str) -> None:
+def create_task(
+    name: str, project_id: str, memberships: List[Dict[str, str]] = None
+) -> None:
     """
 
     :param name: the name of the future task
     :param project_id: the external (Asana) ID of the project
+    :param memberships: the list of deep tree position of the task
     """
+    parameters: Dict[str, Any] = {
+        "name": name,
+        "notes": "Giges was here.",
+        "projects": [project_id],
+    }
+    if memberships:
+        parameters["memberships"] = memberships
     client = create_client()
     client.tasks.create_in_workspace(
         current_app.config["ASANA_WORKSPACE"],
-        {"name": name, "notes": "Giges was here.", "projects": [project_id]},
+        parameters,
     )
 
 
@@ -153,19 +163,27 @@ def handle_customer_workflow(
         asana_task = retrieve_task_information(task_gid)
         template = None
         customer_project = None
+        customer_section = None
         for membership in asana_task["memberships"]:
             template = template or template_tasks.get(
                 membership["section"]["name"]
             )
             if membership["project"]["name"].startswith("P -"):
                 customer_project = membership["project"]["gid"]
+                customer_section = membership["section"]["gid"]
 
         if not template or not customer_project:
             break
 
         template_subtasks = retrieve_subtasks(template["gid"])
         for subtask in template_subtasks:
-            create_task(subtask["name"], customer_project)
+            create_task(
+                subtask["name"],
+                customer_project,
+                memberships=[
+                    {"project": customer_project, "section": customer_section}
+                ],
+            )
 
     db.session.add(Event(webhook=webhook, content=events))
     db.session.commit()
