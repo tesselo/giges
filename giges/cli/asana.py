@@ -63,7 +63,14 @@ def _register_webhook(
     :param filter: the filters to know the Asana objects that we are examining
     """
     client = create_client()
-    webhook = Webhook(path=path, resource_type=filter["resource_type"])
+    webhook = Webhook.query.filter_by(path=path).one_or_none()
+    if webhook:
+        # Allow seamless re-subscriptions
+        client.webhooks.delete_by_id(webhook.external_id)
+        webhook.secret = None
+        webhook.external_id = None
+    else:
+        webhook = Webhook(path=path, resource_type=filter["resource_type"])
     if webhook.resource_type in (
         ResourceTypeEnum.task,
         ResourceTypeEnum.story,
