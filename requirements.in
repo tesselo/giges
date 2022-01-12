@@ -9,5 +9,8 @@ zappa
 sentry-sdk[flask]
 slack-sdk
 structlog
-connexion[swagger-ui]
+connexion2[swagger-ui]
+
+placebo==0.9.0  # kappa / zappa conflict
+openapi-schema-validator<0.2  # connexion restriction
 pyyaml<6
