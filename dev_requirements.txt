@@ -4,21 +4,19 @@
 #
 #    pip-compile --output-file=./dev_requirements.txt dev_requirements.in
 #
-attrs==21.2.0
+attrs==21.4.0
     # via
     #   jsonschema
     #   pytest
     #   pytest-recording
     #   semgrep
-backports.entry-points-selectable==1.1.1
-    # via virtualenv
 bandit==1.7.1
     # via -r dev_requirements.in
-black==21.11b1
+black==21.12b0
     # via -r dev_requirements.in
-boto3==1.20.18
+boto3==1.20.32
     # via -r dev_requirements.in
-botocore==1.23.18
+botocore==1.23.33
     # via
     #   boto3
     #   s3transfer
@@ -28,7 +26,7 @@ certifi==2021.10.8
     # via requests
 cfgv==3.3.1
     # via pre-commit
-charset-normalizer==2.0.8
+charset-normalizer==2.0.10
     # via requests
 click==7.1.2
     # via
@@ -42,13 +40,13 @@ colorlog==4.8.0
     # via wily
 coverage[toml]==6.2
     # via pytest-cov
-distlib==0.3.3
+distlib==0.3.4
     # via virtualenv
 factory-boy==3.2.1
     # via pytest-factoryboy
-faker==9.9.0
+faker==11.3.0
     # via factory-boy
-filelock==3.4.0
+filelock==3.4.2
     # via virtualenv
 flake8==4.0.1
     # via
@@ -60,11 +58,11 @@ future==0.18.2
     # via radon
 gitdb==4.0.9
     # via gitpython
-gitpython==3.1.24
+gitpython==3.1.26
     # via
     #   bandit
     #   wily
-identify==2.4.0
+identify==2.4.3
     # via pre-commit
 idna==3.3
     # via
@@ -86,7 +84,7 @@ jsonschema==3.2.0
     #   semgrep
 jupyter-core==4.9.1
     # via nbformat
-lxml==4.6.5
+lxml==4.7.1
     # via -r dev_requirements.in
 mando==0.6.4
     # via radon
@@ -94,7 +92,7 @@ mccabe==0.6.1
     # via flake8
 multidict==5.2.0
     # via yarl
-mypy==0.910
+mypy==0.931
     # via -r dev_requirements.in
 mypy-extensions==0.4.3
     # via
@@ -114,7 +112,7 @@ pbr==5.8.0
     # via stevedore
 peewee==3.14.8
     # via semgrep
-platformdirs==2.4.0
+platformdirs==2.4.1
     # via
     #   black
     #   virtualenv
@@ -162,14 +160,14 @@ pyyaml==5.4.1
     #   vcrpy
 radon==4.0.0
     # via wily
-regex==2021.11.10
-    # via black
-requests==2.26.0
+requests==2.27.1
     # via semgrep
 retrying==1.3.3
     # via plotly
-ruamel.yaml==0.17.17
+ruamel.yaml==0.17.20
     # via semgrep
+ruamel.yaml.clib==0.2.6
+    # via ruamel.yaml
 s3transfer==0.5.0
     # via boto3
 semgrep==0.64.0
@@ -195,13 +193,13 @@ text-unidecode==1.3
     # via faker
 toml==0.10.2
     # via
-    #   mypy
     #   pre-commit
     #   pytest
-tomli==1.2.2
+tomli==1.2.3
     # via
     #   black
     #   coverage
+    #   mypy
 tqdm==4.62.3
     # via semgrep
 traitlets==5.1.1
@@ -212,13 +210,13 @@ typing-extensions==4.0.1
     # via
     #   black
     #   mypy
-urllib3==1.26.7
+urllib3==1.26.8
     # via
     #   botocore
     #   requests
 vcrpy==4.1.1
     # via pytest-recording
-virtualenv==20.10.0
+virtualenv==20.13.0
     # via pre-commit
 wcmatch==8.2
     # via semgrep
