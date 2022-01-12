@@ -10,6 +10,7 @@ from connexion.apps.flask_app import FlaskApp
 from connexion.resolver import RestyResolver
 from flask import Flask
 from flask_migrate import Migrate
+from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 SETTINGS_VARIABLE_NAME = "GIGES_SETTINGS"
@@ -50,7 +51,7 @@ def configure_sentry(app: Flask) -> None:
         sentry_sdk.init(
             dsn=app.config["SENTRY_URI"],
             environment=app.config["ENVIRONMENT"],
-            integrations=[FlaskIntegration()],
+            integrations=[AwsLambdaIntegration(), FlaskIntegration()],
         )
 
 
