@@ -151,14 +151,24 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Sentry Release 
-        uses: getsentry/action-release@v1
+        run: |
+            curl -sL https://sentry.io/get-cli/ | bash
+
+            cd giges
+            # Create new Sentry release
+            sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+            sentry-cli releases set-commits --auto $SENTRY_RELEASE
+            sentry-cli releases finalize $SENTRY_RELEASE
+
+            # Create new deploy for this Sentry release
+            sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: 'tesselo'
           SENTRY_PROJECT: 'giges'
-        with:
-          environment: 'staging'
-          version: ${{ github.sha }}
+          SENTRY_ENVIRONMENT: 'staging'
+          SENTRY_RELEASE: ${{ github.sha }}
+
 
   deploy-production:
     name: Deploy to Production
@@ -184,12 +194,21 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Sentry Release
-        uses: getsentry/action-release@v1
+      - name: Sentry Release 
+        run: |
+            curl -sL https://sentry.io/get-cli/ | bash
+
+            cd giges
+            # Create new Sentry release
+            sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+            sentry-cli releases set-commits --auto $SENTRY_RELEASE
+            sentry-cli releases finalize $SENTRY_RELEASE
+
+            # Create new deploy for this Sentry release
+            sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: 'tesselo'
           SENTRY_PROJECT: 'giges'
-        with:
-          environment: 'production'
-          version: ${{ github.sha }}
+          SENTRY_ENVIRONMENT: 'production'
+          SENTRY_RELEASE: ${{ github.sha }}
