@@ -40,7 +40,7 @@ def _add_section(memberships: List[Dict], team_projects: List[str]) -> str:
     section = ""
     for membership in memberships:
         if membership.get("project"):
-            if membership["project"]["gid"] in team_projects:
+            if membership["project"].get("gid") in team_projects:
                 section = membership["section"]["name"]
 
     return section
@@ -60,7 +60,9 @@ def _add_class_of_service(custom_field: Dict[str, str]) -> str:
         "1200760323631982": ":brain:",
     }
 
-    return f'{emojis.get(custom_field["gid"], ":chipmunk:")} '
+    gid = custom_field["gid"] if custom_field else ""
+
+    return f'{emojis.get(gid, ":chipmunk:")} '
 
 
 def daily_stick(team_id: str = None) -> None:
