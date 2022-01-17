@@ -130,7 +130,7 @@ jobs:
     name: Deploy to Staging
     needs: [python_deploy_dependencies, static_checks, test]
     runs-on: ubuntu-latest
-    if: contains('refs/heads/main', github.ref)
+    if: contains('refs/heads/main', github.ref) && !contains('workflow_dispatch', github.event_name)
     steps:
       - name: Checkout giges
         uses: actions/checkout@v2
