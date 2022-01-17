@@ -19,6 +19,10 @@ jobs:
     name: Static checks
     runs-on: ubuntu-latest
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Check out Git repository
         uses: actions/checkout@v2
       - name: Install Python 3
