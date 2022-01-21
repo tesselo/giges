@@ -23,6 +23,35 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+      - name: Sentry Fake Release 
+        run: |
+            curl -sL https://sentry.io/get-cli/ | bash
+            
+            COMMITS=$(curl \
+            --url ${{ github.event.pull_request.commits.href }} \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            | jq ".[].sha")
+
+            cd ${CODE_DIR}
+            # Create new Sentry release
+            sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+            for COMMIT in $COMMITS
+            do 
+              sentry-cli releases set-commits "$SENTY_RELEASE" --commit "${REPO}@${COMMIT}"
+            done
+
+            sentry-cli releases finalize $SENTRY_RELEASE
+
+            # Create new deploy for this Sentry release
+            sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: 'tesselo'
+          SENTRY_PROJECT: 'giges'
+          SENTRY_ENVIRONMENT: 'staging'
+          SENTRY_RELEASE: ${{ github.sha }}
+          REPO: ${{ github.repository }}
+          CODE_DIR: 'giges'
       - name: Check out Git repository
         uses: actions/checkout@v2
       - name: Install Python 3
@@ -157,11 +186,19 @@ jobs:
       - name: Sentry Release 
         run: |
             curl -sL https://sentry.io/get-cli/ | bash
+            COMMITS=$(curl \
+            --url ${{ github.event.pull_request.commits.href }} \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            | jq ".[].sha")
 
-            cd giges
+            cd ${CODE_DIR}
             # Create new Sentry release
             sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
-            sentry-cli releases set-commits --auto $SENTRY_RELEASE
+            for COMMIT in $COMMITS
+            do 
+              sentry-cli releases set-commits "$SENTY_RELEASE" --commit "${REPO}@${COMMIT}"
+            done
+
             sentry-cli releases finalize $SENTRY_RELEASE
 
             # Create new deploy for this Sentry release
@@ -172,6 +209,8 @@ jobs:
           SENTRY_PROJECT: 'giges'
           SENTRY_ENVIRONMENT: 'staging'
           SENTRY_RELEASE: ${{ github.sha }}
+          REPO: ${{ github.repository }}
+          CODE_DIR: 'giges'
 
 
   deploy-production:
