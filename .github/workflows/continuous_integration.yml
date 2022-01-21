@@ -32,7 +32,17 @@ jobs:
         with:
           black: true
           flake8: true
-
+      - name: Sentry Fake Release
+        uses: tesselo/tesselo-release-action@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: 'tesselo'
+        with:
+          sentry_project: 'giges'
+          sentry_environment: 'staging'
+          sentry_release: ${{ github.sha }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          code_dir: 'giges'
   python_dev_dependencies:
     name: Python dev dependencies
     runs-on: ubuntu-latest
@@ -153,11 +163,19 @@ jobs:
       - name: Sentry Release 
         run: |
             curl -sL https://sentry.io/get-cli/ | bash
+            COMMITS=$(curl \
+            --url ${{ github.event.pull_request.commits.href }} \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            | jq ".[].sha")
 
-            cd giges
+            cd ${CODE_DIR}
             # Create new Sentry release
             sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
-            sentry-cli releases set-commits --auto $SENTRY_RELEASE
+            for COMMIT in $(cat .commits)
+            do 
+              sentry-cli releases set-commits "$SENTY_RELEASE" --commit "${REPO}@${COMMIT}"
+            done
+
             sentry-cli releases finalize $SENTRY_RELEASE
 
             # Create new deploy for this Sentry release
@@ -168,6 +186,8 @@ jobs:
           SENTRY_PROJECT: 'giges'
           SENTRY_ENVIRONMENT: 'staging'
           SENTRY_RELEASE: ${{ github.sha }}
+          REPO: ${{ github.repository }}
+          CODE_DIR: 'giges'
 
 
   deploy-production:
