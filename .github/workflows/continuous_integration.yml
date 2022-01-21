@@ -33,7 +33,7 @@ jobs:
           black: true
           flake8: true
       - name: Sentry Fake Release
-        uses: tesselo/tesselo-release-action@v1
+        uses: tesselo/tesselo-release-action@v2
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: 'tesselo'
