@@ -33,7 +33,7 @@ jobs:
           black: true
           flake8: true
       - name: Sentry Fake Release
-        uses: tesselo/tesselo-release-action@v2
+        uses: tesselo/tesselo-release-action@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: 'tesselo'
@@ -42,6 +42,7 @@ jobs:
           sentry_environment: 'staging'
           sentry_release: ${{ github.sha }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          repo: ${{ github.repository }}
           code_dir: 'giges'
   python_dev_dependencies:
     name: Python dev dependencies
