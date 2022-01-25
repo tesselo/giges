@@ -150,25 +150,18 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Sentry Release 
-        run: |
-            curl -sL https://sentry.io/get-cli/ | bash
-
-            cd giges
-            # Create new Sentry release
-            sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
-            sentry-cli releases set-commits --auto $SENTRY_RELEASE
-            sentry-cli releases finalize $SENTRY_RELEASE
-
-            # Create new deploy for this Sentry release
-            sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
+      - name: Sentry Release
+        uses: tesselo/release-action@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: 'tesselo'
-          SENTRY_PROJECT: 'giges'
-          SENTRY_ENVIRONMENT: 'staging'
-          SENTRY_RELEASE: ${{ github.sha }}
-
+        with:
+          sentry_project: 'giges'
+          sentry_environment: 'staging'
+          sentry_release: ${{ github.sha }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repo: ${{ github.repository }}
+          code_dir: 'giges'
 
   deploy-production:
     name: Deploy to Production
@@ -194,21 +187,15 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Sentry Release 
-        run: |
-            curl -sL https://sentry.io/get-cli/ | bash
-
-            cd giges
-            # Create new Sentry release
-            sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
-            sentry-cli releases set-commits --auto $SENTRY_RELEASE
-            sentry-cli releases finalize $SENTRY_RELEASE
-
-            # Create new deploy for this Sentry release
-            sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
+      - name: Sentry Release
+        uses: tesselo/release-action@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: 'tesselo'
-          SENTRY_PROJECT: 'giges'
-          SENTRY_ENVIRONMENT: 'production'
-          SENTRY_RELEASE: ${{ github.sha }}
+        with:
+          sentry_project: 'giges'
+          sentry_environment: 'production'
+          sentry_release: ${{ github.sha }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repo: ${{ github.repository }}
+          code_dir: 'giges'
