@@ -150,18 +150,17 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Sentry Release
-        uses: tesselo/release-action@v4
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: 'tesselo'
+      - name: Sentry Release 
+        uses: tesselo/release-action@main
         with:
-          sentry_project: 'giges'
+          sentry_project: giges
           sentry_environment: 'staging'
           sentry_release: ${{ github.sha }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repo: ${{ github.repository }}
           code_dir: 'giges'
+        env:
+          SENTRY_ORG: 'tesselo'
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
 
   deploy-production:
     name: Deploy to Production
@@ -187,15 +186,13 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Sentry Release
-        uses: tesselo/release-action@v4
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: 'tesselo'
+      - name: Sentry Release 
+        uses: tesselo/release-action@main
         with:
-          sentry_project: 'giges'
+          sentry_project: giges
           sentry_environment: 'production'
           sentry_release: ${{ github.sha }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repo: ${{ github.repository }}
           code_dir: 'giges'
+        env:
+          SENTRY_ORG: 'tesselo'
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
