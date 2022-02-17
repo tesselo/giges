@@ -132,6 +132,29 @@ def handle_task_events(
     db.session.commit()
 
 
+def save_section_change(task: Task, section: str) -> int:
+    """
+    Saves a section change of a task and returns the number
+    of the previous same change.
+
+    :param task: the task to change
+    :param section: the section to move it to
+
+    :return int: the number of times the task has been moved
+    to the same section before
+    """
+    previous_changes = TaskChange.query.filter_by(
+        task_gid=task.external_id, section=section
+    ).count()
+
+    task.section = section
+    task_change = TaskChange(task=task)
+    task_change.save_task_changes()
+    db.session.add(task_change)
+
+    return previous_changes
+
+
 def handle_customer_workflow(
     webhook: Webhook, events: List[Dict[str, Dict]]
 ) -> None:
@@ -160,6 +183,10 @@ def handle_customer_workflow(
     }
 
     for task_gid in task_gids:
+        task = Task.query.filter_by(external_id=task_gid).one_or_none()
+        if not task:
+            task = Task(external_id=task_gid)
+            db.session.add(task)
         asana_task = retrieve_task_information(task_gid)
         template = None
         customer_project = None
@@ -173,7 +200,13 @@ def handle_customer_workflow(
                 customer_section = membership["section"]["gid"]
 
         if not template or not customer_project:
-            break
+            continue
+
+        previous_changes = save_section_change(task, customer_section)
+
+        # Create the tasks only if it is the first time in the section
+        if previous_changes > 0:
+            continue
 
         template_subtasks = retrieve_subtasks(template["gid"])
         for subtask in template_subtasks:
