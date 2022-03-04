@@ -12,7 +12,7 @@
       "events": [
         {
           "function": "giges.tasks.asana.daily_stick",
-          "expression": "cron(0 9 ? * MON-FRI *)"
+          "expression": "cron(0 9 ? * TUE,THU *)"
         }
       ],
       "environment_variables": {
