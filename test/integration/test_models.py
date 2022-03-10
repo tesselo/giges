@@ -3,7 +3,7 @@ from datetime import datetime
 from giges.models.asana import Project
 
 
-def test_asana_project(transactional_db):
+def test_asana_project(db_session):
     assert Project.query.count() == 0
 
     project = Project(
@@ -12,7 +12,7 @@ def test_asana_project(transactional_db):
         created_at=datetime.now(),
         updated_at=datetime.now(),
     )
-    transactional_db.add(project)
-    transactional_db.commit()
+    db_session.add(project)
+    db_session.commit()
 
     assert Project.query.count() == 1

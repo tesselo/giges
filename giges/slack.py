@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 import structlog
 from flask import current_app
@@ -13,13 +13,16 @@ class SlackClient(WebClient):
     def __init__(self, **kwargs: Any):
         super().__init__(token=current_app.config["SLACK_TOKEN"], **kwargs)
 
-    def send_message(self, channel: str, message: str) -> SlackResponse:
+    def send_message(
+        self, channel: str, message: str
+    ) -> Optional[SlackResponse]:
         try:
             return self.chat_postMessage(channel=channel, text=message)
         except SlackApiError as e:
             logger.error("Failed to send a message to slack", error=e)
+            return None
 
-    def send_to_road_blocks(self, message: str) -> SlackResponse:
+    def send_to_road_blocks(self, message: str) -> Optional[SlackResponse]:
         return self.send_message(
             current_app.config["SLACK_BLOCKS_CHANNEL"], message
         )

@@ -80,8 +80,8 @@ def remove_tessera_from_team(tessera_id: str, team_id: str) -> None:
     :param tessera_id: the giges UUID for this tessera
     :param team_id: the giges UUID for the team
     """
-    tessera = Team.query.get(tessera_id)
-    team = Team(name=team_id)
+    tessera = Tessera.query.get(tessera_id)
+    team = Team.query.get(team_id)
     team.tesseras.remove(tessera)
     db.session.add(team)
     db.session.commit()
@@ -105,7 +105,7 @@ def add_project_to_team(project_id: str, team_id: str) -> None:
 
 
 @team_cli.command(help="Removes a project from a team")
-@click.argument("tessera_id", type=str, required=True)
+@click.argument("project_id", type=str, required=True)
 @click.argument("team_id", type=str, required=True)
 @with_appcontext
 def remove_project_from_team(project_id: str, team_id: str) -> None:
@@ -116,6 +116,6 @@ def remove_project_from_team(project_id: str, team_id: str) -> None:
     """
     project = Project.query.get(project_id)
     team = Team.query.get(team_id)
-    team.tesseras.remove(project)
+    team.projects.remove(project)
     db.session.add(team)
     db.session.commit()

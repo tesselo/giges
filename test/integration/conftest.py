@@ -5,9 +5,22 @@ from sqlalchemy import inspect
 
 from giges.app import create_connexion_app
 from giges.db import db
-from .factories import EventFactory, ProjectFactory, WebhookFactory
 
-for factory in (EventFactory, ProjectFactory, WebhookFactory):
+from .factories import (
+    EventFactory,
+    ProjectFactory,
+    TeamFactory,
+    TesseraFactory,
+    WebhookFactory,
+)
+
+for factory in (
+    EventFactory,
+    ProjectFactory,
+    WebhookFactory,
+    TeamFactory,
+    TesseraFactory,
+):
     register(factory)
 
 
@@ -54,7 +67,7 @@ def _db(app):
 
 
 @pytest.fixture(autouse=True)
-def transactional_db(_db):
+def db_session(_db):
     yield _db.session
     _db.session.rollback()
     for table in reversed(_db.metadata.sorted_tables):

@@ -5,6 +5,7 @@ from faker.providers import date_time
 
 from giges.db import db
 from giges.models.asana import Event, Project, ResourceTypeEnum, Webhook
+from giges.models.team import Team, Tessera
 
 Faker.add_provider(date_time)
 
@@ -40,5 +41,26 @@ class EventFactory(SQLAlchemyModelFactory):
 
     class Meta:
         model = Event
+        sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = "commit"
+
+
+class TeamFactory(SQLAlchemyModelFactory):
+    name = FuzzyText()
+
+    class Meta:
+        model = Team
+        sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = "commit"
+
+
+class TesseraFactory(SQLAlchemyModelFactory):
+    name = FuzzyText()
+    asana_id = FuzzyText()
+    github_handle = FuzzyText()
+    slack_id = FuzzyText()
+
+    class Meta:
+        model = Tessera
         sqlalchemy_session = db.session
         sqlalchemy_session_persistence = "commit"

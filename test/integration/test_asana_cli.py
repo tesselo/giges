@@ -46,10 +46,10 @@ def test_asana_cli_create_tasks_webhook_without_id(cli_runner):
 
 
 @pytest.mark.vcr
-def test_asana_cli_create_tasks_webhook(cli_runner, project, transactional_db):
+def test_asana_cli_create_tasks_webhook(cli_runner, project, db_session):
     project.external_id = "1200150717156531"
-    transactional_db.add(project)
-    transactional_db.commit()
+    db_session.add(project)
+    db_session.commit()
     result = cli_runner.invoke(
         args=["asana", "create-tasks-webhook", project.external_id]
     )
