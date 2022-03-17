@@ -65,18 +65,43 @@ make check-picky
 ```
 
 
+## Environment variables
+
+We are using a helper to load the environment variables, located in `scripts/loadenv`
+
+It is a bash function that will inject the variables in the corresponding .env file and modify the prompt
+depending on the environment.
+
+To load the function:
+
+```bash
+source scripts/loadenv
+```
+
+After that, load the environment:
+```bash
+loadenv prod
+```
+
+The source files are: `.env.prod`, `.env.stag`, `.env.dev` and `.env.test`
+
+Only `.env.test` is in git, the rest will contain secrets and should not be added to the repository.
+
+
 ## Flask CLI
 
 Database management and other operations will be integrated into the Flask CLI
 
 ```bash
 pip install -e .
-GIGES_SETTINGS=giges.settings.DevelopmentSettings giges
+loadenv dev
+giges
 ```
 
 ### Create & upgrade the database
 
 ```bash
 pip install -e .
-GIGES_SETTINGS=giges.settings.DevelopmentSettings giges db upgrade head
+loadenv dev
+giges db upgrade head
 ```

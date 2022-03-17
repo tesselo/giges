@@ -1,0 +1,31 @@
+#!/bin/env bash
+
+function loadenv() {
+
+	case $1 in
+		prod)	ENVFILE=".env.prod"
+			NEWPROMPT="\e[0;31m\e[5m[PRODUCTION]\e(B\e[m $PS1"
+			;;
+	  stag)	ENVFILE=".env.stag"
+			NEWPROMPT="\e[0;31m[stag]\e[m ${PS1}"
+			;;
+		dev)	ENVFILE=".env.dev"
+			NEWPROMPT="[dev] ${PS1}"
+			;;
+		test)	ENVFILE=".env.test"
+			NEWPROMPT="[test] ${PS1}"
+			;;
+	esac
+
+	if [ ! -z $ENVFILE ]
+	then
+		if [ -e $ENVFILE ]
+		then
+			export $(cat ${ENVFILE} | grep -v ^# | xargs) >/dev/null
+			export PS1=$NEWPROMPT
+		else
+			echo "Sorry, $ENVFILE is not there."
+		fi
+	fi
+}
+

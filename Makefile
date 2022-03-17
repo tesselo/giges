@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 #
 #   Package Management
 #
@@ -14,7 +15,7 @@ dev_install: install
 	pre-commit install
 	pre-commit install --hook-type commit-msg
 
-upgrade_dependencies: dev_install
+upgrade_dependencies:
 	pip install pip-tools
 	pip-compile --upgrade --output-file ./requirements.txt requirements.in
 	pip-compile --upgrade --output-file ./dev_requirements.txt dev_requirements.in
@@ -32,7 +33,7 @@ mypy:
 	cat .mypy_reports/index.txt
 
 coverage:
-	GIGES_SETTINGS=giges.settings.TestingSettings \
+	source scripts/loadenv && loadenv test && \
 	python -m pytest --cov=giges --cov-report term --cov-report html:reports/coverage-integration --cov-report term:skip-covered
 
 

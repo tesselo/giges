@@ -260,3 +260,9 @@ venv/
 # Local databases
 testing.db
 development.db
+
+
+# Environment files
+.env.prod
+.env.stag
+.env.dev
