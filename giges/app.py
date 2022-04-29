@@ -76,7 +76,7 @@ def create_connexion_app(
     connexion_app.add_api(
         "api.yml",
         validate_responses=True,
-        strict_validation=True,
+        strict_validation=False,
         resolver=RestyResolver("giges.handlers"),
     )
 
