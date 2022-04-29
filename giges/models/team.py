@@ -41,6 +41,7 @@ class Team(db.Model, UUIDMixin):
         "Tessera", secondary=team_tessera_association, back_populates="teams"
     )
     projects = relationship("Project", secondary=team_project_association)
+    rituals = relationship("Ritual")
 
 
 class Tessera(db.Model, UUIDMixin):
