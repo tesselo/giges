@@ -5,6 +5,8 @@ from faker.providers import date_time
 
 from giges.db import db
 from giges.models.asana import Event, Project, ResourceTypeEnum, Webhook
+from giges.models.ritual import Ritual
+from giges.models.team import Team
 
 Faker.add_provider(date_time)
 
@@ -40,5 +42,26 @@ class EventFactory(SQLAlchemyModelFactory):
 
     class Meta:
         model = Event
+        sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = "commit"
+
+
+class TeamFactory(SQLAlchemyModelFactory):
+    name = FuzzyText()
+
+    class Meta:
+        model = Team
+        sqlalchemy_session = db.session
+        sqlalchemy_session_persistence = "commit"
+
+
+class RitualFactory(SQLAlchemyModelFactory):
+    name = FuzzyText()
+    team = SubFactory(TeamFactory)
+    logs_url = FuzzyText()
+    meeting_url = FuzzyText()
+
+    class Meta:
+        model = Ritual
         sqlalchemy_session = db.session
         sqlalchemy_session_persistence = "commit"
