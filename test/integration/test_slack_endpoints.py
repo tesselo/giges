@@ -23,7 +23,7 @@ def test_slack_command_ritual(client, ritual, logs_url, meeting_url, blocks):
         },
         content_type="application/x-www-form-urlencoded",
     )
-    assert response.status_code == 200, response
+    assert response.status_code == 200
     assert response.json
     assert len(response.json["blocks"]) == blocks
 
@@ -50,3 +50,27 @@ def test_slack_command_ritual_bad_data(client, ritual):
         content_type="application/x-www-form-urlencoded",
     )
     assert response.status_code == 400, response
+
+
+def test_slack_command_random_selection(client):
+
+    response = client.post(
+        "/slack/commands/random_humans",
+        data={"command": "/random_human", "text": "there was upon a time"},
+    )
+
+    assert response.status_code == 200
+    assert response.json
+    assert len(response.json["blocks"]) == 6
+
+
+def test_slack_command_random_selection_no_humans(client):
+
+    response = client.post(
+        "/slack/commands/random_humans",
+        data={"command": "/random_human", "text": ""},
+    )
+
+    assert response.status_code == 200
+    assert response.json
+    assert "YES, YES" in response.json["blocks"][-1]["text"]["text"]
