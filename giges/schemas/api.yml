@@ -31,6 +31,38 @@ components:
       title: Asana Event Webhook Empty Body
       type: object
 
+    SlackCommandWebhookBody:
+      title: Slack command webhook body
+      properties:
+        channel_id:
+          description: The Slack channel ID yes
+        token:
+          description: Some token I still do not know how to use
+        channel_name:
+          description: The human Slack channel name
+        user_id:
+          description: The slack ID for the user
+        command:
+          description: The unused slack component with the command
+        text:
+          description: Everything after the command that the user entered
+        response_url:
+          description: An ephemeral URL where we can send slow responses
+        api_app_id:
+          description: Something that will most likely be needed later
+        team_id:
+          description: The slack team ID
+        team_domain:
+          description: The slack team domain
+        enterprise_id:
+          description: The slack enterprise ID
+        enterprise_name:
+          description: The slack enterprise name
+        user_name:
+          description: The slack user name
+        trigger_id:
+          description: The slack trigger ID
+
 
   parameters:
     HookSecretHeader:
@@ -129,36 +161,7 @@ paths:
         content:
           'application/x-www-form-urlencoded':
             schema:
-              additionalProperties: true
-              properties:
-                channel_id:
-                  description: The Slack channel ID yes
-                token:
-                  description: Some token I still do not know how to use
-                channel_name:
-                  description: The human Slack channel name
-                user_id:
-                  description: The slack ID for the user
-                command:
-                  description: The unused slack component with the command
-                text:
-                  description: Everything after the command that the user entered
-                response_url:
-                  description: An ephemeral URL where we can send slow responses
-                api_app_id:
-                  description: Something that will most likely be needed later
-                team_id:
-                  description: The slack team ID
-                team_domain:
-                  description: The slack team domain
-                enterprise_id:
-                  description: The slack enterprise ID
-                enterprise_name:
-                  description: The slack enterprise name
-                user_name:
-                  description: The slack user name
-                trigger_id:
-                  description: The slack trigger ID
+              $ref: '#/components/schemas/SlackCommandWebhookBody'
 
       responses:
         200:
@@ -171,3 +174,26 @@ paths:
           description: 'Command bad formatted'
         404:
           description: 'That ritual does not exist'
+
+  /slack/commands/random_humans:
+    post:
+      tags: [ Slack, Tesserito ]
+      operationId: giges.handlers.slack.human_selection
+      summary: Do the random human selection
+      requestBody:
+        content:
+          'application/x-www-form-urlencoded':
+            schema:
+              $ref: '#/components/schemas/SlackCommandWebhookBody'
+
+      responses:
+        200:
+          description: 'Command received, slack'
+          content:
+            application/json:
+              schema:
+                type: object
+        400:
+          description: 'Command bad formatted'
+        404:
+          description: 'Those are not our humans'
